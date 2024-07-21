@@ -1,0 +1,97 @@
+package com.daljeet.xplayer.feature.videopicker.screens.mediaFolder
+
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.daljeet.xplayer.core.common.extensions.prettyName
+import com.daljeet.xplayer.core.model.ApplicationPreferences
+import com.daljeet.xplayer.core.ui.R
+import com.daljeet.xplayer.core.ui.components.NextTopAppBar
+import com.daljeet.xplayer.core.ui.designsystem.NextIcons
+import com.daljeet.xplayer.feature.videopicker.composables.VideosView
+import com.daljeet.xplayer.feature.videopicker.screens.VideosState
+import java.io.File
+
+@Composable
+fun MediaPickerFolderRoute(
+    viewModel: MediaPickerFolderViewModel = hiltViewModel(),
+    onVideoClick: (uri: Uri) -> Unit,
+    onNavigateUp: () -> Unit
+) {
+    // The app experiences jank when videosState updates before the initial render finishes.
+    // By adding Lifecycle.State.RESUMED, we ensure that we wait until the first render completes.
+    val videosState by viewModel.videos.collectAsStateWithLifecycle(minActiveState = Lifecycle.State.RESUMED)
+    val preferences by viewModel.preferences.collectAsStateWithLifecycle()
+
+    val deleteIntentSenderLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartIntentSenderForResult(),
+        onResult = {}
+    )
+
+    MediaPickerFolderScreen(
+        folderPath = viewModel.folderPath,
+        videosState = videosState,
+        preferences = preferences,
+        onVideoClick = onVideoClick,
+        onNavigateUp = onNavigateUp,
+        onDeleteVideoClick = { viewModel.deleteVideos(listOf(it), deleteIntentSenderLauncher) },
+        onAddToSync = viewModel::addToMediaInfoSynchronizer
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+internal fun MediaPickerFolderScreen(
+    folderPath: String,
+    videosState: VideosState,
+    preferences: ApplicationPreferences,
+    onNavigateUp: () -> Unit,
+    onVideoClick: (Uri) -> Unit,
+    onDeleteVideoClick: (String) -> Unit,
+    onAddToSync: (Uri) -> Unit
+) {
+    Column {
+        NextTopAppBar(
+            title = File(folderPath).prettyName,
+            navigationIcon = {
+                IconButton(onClick = onNavigateUp) {
+                    Icon(
+                        imageVector = NextIcons.ArrowBack,
+                        contentDescription = stringResource(id = R.string.navigate_up)
+                    )
+                }
+            }
+        )
+        Box(
+            modifier = Modifier
+                .fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            VideosView(
+                videosState = videosState,
+                preferences = preferences,
+                onVideoClick = onVideoClick,
+                onDeleteVideoClick = onDeleteVideoClick,
+                onVideoLoaded = onAddToSync
+            )
+        }
+
+    }
+}

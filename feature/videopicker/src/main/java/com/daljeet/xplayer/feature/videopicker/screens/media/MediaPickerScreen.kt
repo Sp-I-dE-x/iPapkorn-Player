@@ -1,0 +1,215 @@
+package com.daljeet.xplayer.feature.videopicker.screens.media
+
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Surface
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.daljeet.xplayer.core.model.ApplicationPreferences
+import com.daljeet.xplayer.core.model.Video
+import com.daljeet.xplayer.core.ui.R
+import com.daljeet.xplayer.core.ui.components.NextCenterAlignedTopAppBar
+import com.daljeet.xplayer.core.ui.designsystem.NextIcons
+import com.daljeet.xplayer.core.ui.preview.DayNightPreview
+import com.daljeet.xplayer.core.ui.preview.DevicePreviews
+import com.daljeet.xplayer.core.ui.preview.VideoPickerPreviewParameterProvider
+import com.daljeet.xplayer.core.ui.theme.NextPlayerTheme
+import com.daljeet.xplayer.feature.videopicker.composables.FoldersView
+import com.daljeet.xplayer.feature.videopicker.composables.QuickSettingsDialog
+import com.daljeet.xplayer.feature.videopicker.composables.TextIconToggleButton
+import com.daljeet.xplayer.feature.videopicker.composables.VideosView
+import com.daljeet.xplayer.feature.videopicker.screens.FoldersState
+import com.daljeet.xplayer.feature.videopicker.screens.VideosState
+
+const val CIRCULAR_PROGRESS_INDICATOR_TEST_TAG = "circularProgressIndicator"
+
+@Composable
+fun MediaPickerRoute(
+    onSettingsClick: () -> Unit,
+    onPlayVideo: (uri: Uri) -> Unit,
+    onFolderClick: (folderPath: String) -> Unit,
+    viewModel: MediaPickerViewModel = hiltViewModel()
+) {
+    val videosState by viewModel.videosState.collectAsStateWithLifecycle()
+    val foldersState by viewModel.foldersState.collectAsStateWithLifecycle()
+    val preferences by viewModel.preferences.collectAsStateWithLifecycle()
+
+    val deleteIntentSenderLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartIntentSenderForResult(),
+        onResult = {}
+    )
+
+    MediaPickerScreen(
+        videosState = videosState,
+        foldersState = foldersState,
+        preferences = preferences,
+        onPlayVideo = onPlayVideo,
+        onFolderClick = onFolderClick,
+        onSettingsClick = onSettingsClick,
+        updatePreferences = viewModel::updateMenu,
+        onDeleteVideoClick = { viewModel.deleteVideos(listOf(it), deleteIntentSenderLauncher) },
+        onDeleteFolderClick = { viewModel.deleteFolders(listOf(it), deleteIntentSenderLauncher) },
+        onAddToSync = viewModel::addToMediaInfoSynchronizer
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+internal fun MediaPickerScreen(
+    videosState: VideosState,
+    foldersState: FoldersState,
+    preferences: ApplicationPreferences,
+    onPlayVideo: (uri: Uri) -> Unit = {},
+    onFolderClick: (folderPath: String) -> Unit = {},
+    onSettingsClick: () -> Unit = {},
+    updatePreferences: (ApplicationPreferences) -> Unit = {},
+    onDeleteVideoClick: (String) -> Unit,
+    onDeleteFolderClick: (String) -> Unit,
+    onAddToSync: (Uri) -> Unit = {}
+) {
+    var showMenu by rememberSaveable { mutableStateOf(false) }
+
+    Column {
+        NextCenterAlignedTopAppBar(
+            title = stringResource(id = R.string.app_name),
+            navigationIcon = {
+                IconButton(onClick = onSettingsClick) {
+                    Icon(
+                        imageVector = NextIcons.Settings,
+                        contentDescription = stringResource(id = R.string.settings)
+                    )
+                }
+            },
+            actions = {
+                IconButton(onClick = { showMenu = true }) {
+                    Icon(
+                        imageVector = NextIcons.DashBoard,
+                        contentDescription = stringResource(id = R.string.menu)
+                    )
+                }
+            }
+        )
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            if (preferences.groupVideosByFolder) {
+                FoldersView(
+                    foldersState = foldersState,
+                    preferences = preferences,
+                    onFolderClick = onFolderClick,
+                    onDeleteFolderClick = onDeleteFolderClick
+                )
+            } else {
+                VideosView(
+                    videosState = videosState,
+                    onVideoClick = onPlayVideo,
+                    preferences = preferences,
+                    onDeleteVideoClick = onDeleteVideoClick,
+                    onVideoLoaded = onAddToSync
+                )
+            }
+        }
+    }
+
+    if (showMenu) {
+        QuickSettingsDialog(
+            applicationPreferences = preferences,
+            onDismiss = { showMenu = false },
+            updatePreferences = updatePreferences
+        )
+    }
+}
+
+@DevicePreviews
+@Composable
+fun MediaPickerScreenPreview(
+    @PreviewParameter(VideoPickerPreviewParameterProvider::class)
+    videos: List<Video>
+) {
+    BoxWithConstraints {
+        NextPlayerTheme {
+            Surface {
+                MediaPickerScreen(
+                    videosState = VideosState.Success(
+                        data = videos
+                    ),
+                    foldersState = FoldersState.Loading,
+                    preferences = ApplicationPreferences().copy(groupVideosByFolder = false),
+                    onPlayVideo = {},
+                    onFolderClick = {},
+                    onDeleteVideoClick = {},
+                    onDeleteFolderClick = {}
+                )
+            }
+        }
+    }
+}
+
+@Preview
+@Composable
+fun ButtonPreview() {
+    Surface {
+        TextIconToggleButton(
+            text = "Title",
+            icon = NextIcons.Title,
+            onClick = {}
+        )
+    }
+}
+
+@DayNightPreview
+@Composable
+fun MediaPickerNoVideosFoundPreview() {
+    NextPlayerTheme {
+        Surface {
+            MediaPickerScreen(
+                videosState = VideosState.Loading,
+                foldersState = FoldersState.Success(
+                    data = emptyList()
+                ),
+                preferences = ApplicationPreferences(),
+                onPlayVideo = {},
+                onFolderClick = {},
+                onDeleteVideoClick = {},
+                onDeleteFolderClick = {}
+            )
+        }
+    }
+}
+
+@DayNightPreview
+@Composable
+fun MediaPickerLoadingPreview() {
+    NextPlayerTheme {
+        Surface {
+            MediaPickerScreen(
+                videosState = VideosState.Loading,
+                foldersState = FoldersState.Loading,
+                preferences = ApplicationPreferences(),
+                onPlayVideo = {},
+                onFolderClick = {},
+                onDeleteVideoClick = {},
+                onDeleteFolderClick = {}
+            )
+        }
+    }
+}
