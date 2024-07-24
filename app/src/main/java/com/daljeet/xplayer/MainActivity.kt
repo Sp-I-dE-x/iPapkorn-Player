@@ -24,23 +24,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material3.Badge
-import androidx.compose.material3.BadgedBox
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -49,15 +34,9 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
+import androidx.lifecycle.*
 import androidx.navigation.NavController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.compose.*
 import com.daljeet.xplayer.core.media.sync.MediaSynchronizer
 import com.daljeet.xplayer.core.model.ThemeConfig
 import com.daljeet.xplayer.core.ui.theme.NextPlayerTheme
@@ -76,7 +55,6 @@ import java.io.File
 import java.util.Arrays
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
-
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -102,9 +80,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initializeMobileAdsSdk()
-        if (intent?.data == null) {
-        } else {
-            showDownloadDialog(intent?.data!!)
+        if (intent?.data != null) {
+            showDownloadDialog(intent.data!!)
         }
 
         var uiState: MainActivityUiState by mutableStateOf(MainActivityUiState.Loading)
@@ -138,7 +115,6 @@ class MainActivity : ComponentActivity() {
             // creating a list of all the tabs
             val tabBarItems = listOf(homeTab, settingsTab)
 
-
             NextPlayerTheme(
                 darkTheme = shouldUseDarkTheme(uiState = uiState),
                 highContrastDarkTheme = shouldUseHighContrastDarkTheme(uiState = uiState),
@@ -170,21 +146,18 @@ class MainActivity : ComponentActivity() {
                     }
 
                     val mainNavController = rememberNavController()
-                    val mediaNavController = rememberNavController()
-                    val bottomBarState = rememberSaveable { (mutableStateOf(true)) }
-
                     val navBackStackEntry by mainNavController.currentBackStackEntryAsState()
 
-// Control TopBar and BottomBar
+                    val bottomBarState = rememberSaveable { (mutableStateOf(true)) }
+
+                    // Control TopBar and BottomBar
                     when (navBackStackEntry?.destination?.route) {
                         MAIN_ROUTE, "Downloads" -> {
                             // Show BottomBar and TopBar
                             bottomBarState.value = true
                         }
-
                         else -> {
                             bottomBarState.value = false
-
                         }
                     }
 
@@ -194,8 +167,6 @@ class MainActivity : ComponentActivity() {
                                 TabView(tabBarItems, mainNavController)
                             }
                         }
-
-
                     ) {
                         NavHost(navController = mainNavController, startDestination = MAIN_ROUTE) {
                             composable(MAIN_ROUTE) {
@@ -213,23 +184,13 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            registerReceiver(
-                onComplete,
-                IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE),
-                RECEIVER_EXPORTED
-            )
-        } else {
-            registerReceiver(onComplete, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
-        }
 
-
+        registerReceiver(onComplete, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        unregisterReceiver(onComplete);
-
+        unregisterReceiver(onComplete)
     }
 
     private fun initializeMobileAdsSdk() {
@@ -238,29 +199,27 @@ class MainActivity : ComponentActivity() {
         }
         // Initialize the Mobile Ads SDK.
         MobileAds.initialize(this) {}
-        val config= RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("1EB6EAD9715AB41F3696FCC31586020F")).build()
+        val config = RequestConfiguration.Builder()
+            .setTestDeviceIds(Arrays.asList("1EB6EAD9715AB41F3696FCC31586020F")).build()
         MobileAds.setRequestConfiguration(config)
-
     }
-
 
     private fun createDirectory(): Boolean {
-        var ret = false
         val filepath = Environment.getExternalStorageDirectory()
         val dir = File(filepath.path + "/iPapkorn/")
-        if (!dir.exists()) {
+        return if (!dir.exists()) {
             try {
                 dir.mkdirs()
-                ret = true
             } catch (e: Exception) {
-                ret = false
                 e.printStackTrace()
+                false
             }
+        } else {
+            true
         }
-        return ret
     }
 
-    var onComplete: BroadcastReceiver = object : BroadcastReceiver() {
+    private var onComplete: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(ctxt: Context?, intent: Intent?) {
             Toast.makeText(this@MainActivity, "Download Completed", Toast.LENGTH_SHORT).show()
         }
@@ -268,199 +227,160 @@ class MainActivity : ComponentActivity() {
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        if (intent?.data != null) {
-            showDownloadDialog(intent.data!!)
+        intent?.data?.let {
+            showDownloadDialog(it)
         }
     }
 
-    fun showDownloadDialog(uri: Uri) {
-        val builder1: AlertDialog.Builder = AlertDialog.Builder(this)
-        builder1.setMessage("Please Select Before Proceed")
-        builder1.setCancelable(true)
-        builder1.setNegativeButton(
-            "Download"
-        ) { dialog, id ->
-            (applicationContext as NextPlayerApplication).showRewardedAdIfLoaded()
-            manager = getSystemService(DOWNLOAD_SERVICE) as DownloadManager
-            val request = DownloadManager.Request(uri)
-            request.setDestinationInExternalPublicDir(
-                Environment.DIRECTORY_DOWNLOADS,
-                "iPapkorn/" + getFileName(uri)
-            )
-            val reference = manager!!.enqueue(request)
-            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)
-            dialog.cancel()
-        }
-
-        builder1.setPositiveButton(
-            "Stream"
-        ) { dialog, _ ->
-            val intent = Intent(Intent.ACTION_VIEW, uri, this, PlayerActivity::class.java)
-            startActivity(intent)
-            dialog.cancel()
-        }
-
-        val alert11: AlertDialog = builder1.create()
-        alert11.show()
+    private fun showDownloadDialog(uri: Uri) {
+        val builder = AlertDialog.Builder(this)
+        builder.setMessage("Please Select Before Proceed")
+            .setCancelable(true)
+            .setNegativeButton("Download") { dialog, _ ->
+                (applicationContext as NextPlayerApplication).showRewardedAdIfLoaded()
+                manager = getSystemService(DOWNLOAD_SERVICE) as DownloadManager
+                val request = DownloadManager.Request(uri)
+                request.setDestinationInExternalPublicDir(
+                    Environment.DIRECTORY_DOWNLOADS,
+                    "iPapkorn/" + getFileName(uri)
+                )
+                manager?.enqueue(request)
+                request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)
+                dialog.cancel()
+            }
+            .setPositiveButton("Stream") { dialog, _ ->
+                val intent = Intent(Intent.ACTION_VIEW, uri, this, PlayerActivity::class.java)
+                startActivity(intent)
+                dialog.cancel()
+            }
+        builder.create().show()
     }
 
-    fun getFileName(uri: Uri): String? {
+    private fun getFileName(uri: Uri): String? {
         var result: String? = null
         if (uri.scheme == "content") {
-            val cursor = contentResolver.query(uri, null, null, null, null)
-            try {
-                if (cursor != null && cursor.moveToFirst()) {
+            contentResolver.query(uri, null, null, null, null)?.use { cursor ->
+                if (cursor.moveToFirst()) {
                     result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
                 }
-            } finally {
-                cursor!!.close()
             }
         }
         if (result == null) {
             result = uri.path
-            val cut = result!!.lastIndexOf('/')
+            val cut = result?.lastIndexOf('/') ?: -1
             if (cut != -1) {
-                result = result.substring(cut + 1)
+                result = result?.substring(cut + 1)
             }
         }
         return result
     }
-}
 
-
-/**
- * Returns `true` if dark theme should be used, as a function of the [uiState] and the
- * current system context.
- */
-@Composable
-private fun shouldUseDarkTheme(
-    uiState: MainActivityUiState
-): Boolean = when (uiState) {
-    MainActivityUiState.Loading -> isSystemInDarkTheme()
-    is MainActivityUiState.Success -> when (uiState.preferences.themeConfig) {
-        ThemeConfig.SYSTEM -> isSystemInDarkTheme()
-        ThemeConfig.OFF -> false
-        ThemeConfig.ON -> true
-    }
-}
-
-@Composable
-fun shouldUseHighContrastDarkTheme(
-    uiState: MainActivityUiState
-): Boolean = when (uiState) {
-    MainActivityUiState.Loading -> false
-    is MainActivityUiState.Success -> uiState.preferences.useHighContrastDarkTheme
-}
-
-/**
- * Returns `true` if the dynamic color is disabled, as a function of the [uiState].
- */
-@Composable
-private fun shouldUseDynamicTheming(
-    uiState: MainActivityUiState
-): Boolean = when (uiState) {
-    MainActivityUiState.Loading -> false
-    is MainActivityUiState.Success -> uiState.preferences.useDynamicColors
-}
-
-data class TabBarItem(
-    val title: String,
-    val selectedIcon: ImageVector,
-    val unselectedIcon: ImageVector,
-    val badgeAmount: Int? = null,
-    val root: String,
-)
-
-@Composable
-fun TabView(tabBarItems: List<TabBarItem>, navController: NavController) {
-    var selectedTabIndex by rememberSaveable {
-        mutableStateOf(0)
+    @Composable
+    private fun shouldUseDarkTheme(uiState: MainActivityUiState): Boolean = when (uiState) {
+        MainActivityUiState.Loading -> isSystemInDarkTheme()
+        is MainActivityUiState.Success -> when (uiState.preferences.themeConfig) {
+            ThemeConfig.SYSTEM -> isSystemInDarkTheme()
+            ThemeConfig.OFF -> false
+            ThemeConfig.ON -> true
+        }
     }
 
-    NavigationBar(
-        containerColor = Color.Transparent
+    @Composable
+    fun shouldUseHighContrastDarkTheme(uiState: MainActivityUiState): Boolean = when (uiState) {
+        MainActivityUiState.Loading -> false
+        is MainActivityUiState.Success -> uiState.preferences.useHighContrastDarkTheme
+    }
+
+    @Composable
+    private fun shouldUseDynamicTheming(uiState: MainActivityUiState): Boolean = when (uiState) {
+        MainActivityUiState.Loading -> false
+        is MainActivityUiState.Success -> uiState.preferences.useDynamicColors
+    }
+
+    data class TabBarItem(
+        val title: String,
+        val selectedIcon: ImageVector,
+        val unselectedIcon: ImageVector,
+        val badgeAmount: Int? = null,
+        val root: String,
+    )
+
+    @Composable
+    fun TabView(tabBarItems: List<TabBarItem>, navController: NavController) {
+        var selectedTabIndex by rememberSaveable {
+            mutableStateOf(0)
+        }
+
+        NavigationBar(containerColor = Color.Transparent) {
+            tabBarItems.forEachIndexed { index, tabBarItem ->
+                NavigationBarItem(
+                    selected = selectedTabIndex == index,
+                    onClick = {
+                        selectedTabIndex = index
+                        navController.navigate(tabBarItem.root)
+                    },
+                    icon = {
+                        TabBarIconView(
+                            isSelected = selectedTabIndex == index,
+                            selectedIcon = tabBarItem.selectedIcon,
+                            unselectedIcon = tabBarItem.unselectedIcon,
+                            title = tabBarItem.title,
+                            badgeAmount = tabBarItem.badgeAmount
+                        )
+                    },
+                    label = { Text(tabBarItem.title) }
+                )
+            }
+        }
+    }
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    fun TabBarIconView(
+        isSelected: Boolean,
+        selectedIcon: ImageVector,
+        unselectedIcon: ImageVector,
+        title: String,
+        badgeAmount: Int? = null
     ) {
+        BadgedBox(badge = { TabBarBadgeView(badgeAmount) }) {
+            Icon(
+                imageVector = if (isSelected) {
+                    selectedIcon
+                } else {
+                    unselectedIcon
+                },
+                contentDescription = title
+            )
+        }
+    }
 
-        // looping over each tab to generate the views and navigation for each item
-        tabBarItems.forEachIndexed { index, tabBarItem ->
-            NavigationBarItem(
-                selected = selectedTabIndex == index,
-                onClick = {
-                    selectedTabIndex = index
-                    navController.navigate(tabBarItem.root)
-                },
-                icon = {
-                    TabBarIconView(
-                        isSelected = selectedTabIndex == index,
-                        selectedIcon = tabBarItem.selectedIcon,
-                        unselectedIcon = tabBarItem.unselectedIcon,
-                        title = tabBarItem.title,
-                        badgeAmount = tabBarItem.badgeAmount
-                    )
-                },
-                label = { Text(tabBarItem.title) })
+    @Composable
+    @OptIn(ExperimentalMaterial3Api::class)
+    fun TabBarBadgeView(count: Int? = null) {
+        count?.let {
+            Badge {
+                Text(it.toString())
+            }
+        }
+    }
+
+    @Composable
+    fun MoreView() {
+        Column(modifier = Modifier.fillMaxSize()) {
+            Text("Thing 1")
+            Text("Thing 2")
+            Text("Thing 3")
+            Text("Thing 4")
+            Text("Thing 5")
+        }
+    }
+
+    @Preview(showBackground = true)
+    @Composable
+    fun GreetingPreview() {
+        NextPlayerTheme {
+            MoreView()
         }
     }
 }
-
-// This component helps to clean up the API call from our TabView above,
-// but could just as easily be added inside the TabView without creating this custom component
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun TabBarIconView(
-    isSelected: Boolean,
-    selectedIcon: ImageVector,
-    unselectedIcon: ImageVector,
-    title: String,
-    badgeAmount: Int? = null
-) {
-    BadgedBox(badge = { TabBarBadgeView(badgeAmount) }) {
-        Icon(
-            imageVector = if (isSelected) {
-                selectedIcon
-            } else {
-                unselectedIcon
-            },
-            contentDescription = title
-        )
-    }
-}
-
-// This component helps to clean up the API call from our TabBarIconView above,
-// but could just as easily be added inside the TabBarIconView without creating this custom component
-@Composable
-@OptIn(ExperimentalMaterial3Api::class)
-fun TabBarBadgeView(count: Int? = null) {
-    if (count != null) {
-        Badge {
-            Text(count.toString())
-        }
-    }
-}
-// end of the reusable components that can be copied over to any new projects
-// ----------------------------------------
-
-// This was added to demonstrate that we are infact changing views when we click a new tab
-@Composable
-fun MoreView() {
-    Column(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Text("Thing 1")
-        Text("Thing 2")
-        Text("Thing 3")
-        Text("Thing 4")
-        Text("Thing 5")
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    NextPlayerTheme {
-        MoreView()
-    }
-}
-
-
-
