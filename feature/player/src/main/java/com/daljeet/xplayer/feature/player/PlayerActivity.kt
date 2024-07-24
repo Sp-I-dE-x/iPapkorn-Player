@@ -3,7 +3,6 @@ package com.daljeet.xplayer.feature.player
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
-import android.app.AlertDialog.*
 import android.app.DownloadManager
 import android.content.Context
 import android.content.Intent
@@ -18,7 +17,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.DisplayMetrics
-import android.util.Log
 import android.util.TypedValue
 import android.view.KeyEvent
 import android.view.SurfaceView
@@ -118,7 +116,6 @@ import timber.log.Timber
 import java.nio.charset.Charset
 import com.daljeet.xplayer.core.ui.R as coreUiR
 
-
 @SuppressLint("UnsafeOptInUsageError")
 @AndroidEntryPoint
 class PlayerActivity : AppCompatActivity() {
@@ -203,7 +200,6 @@ class PlayerActivity : AppCompatActivity() {
 
     private var currentNativeAd: NativeAd? = null
     private lateinit var adView: AdView
-
 
     private val adSize: AdSize
         get() {
@@ -1054,7 +1050,7 @@ class PlayerActivity : AppCompatActivity() {
             binding.nativeAdFrame.removeAllViews()
             binding.nativeAdFrame.addView(unifiedAdBinding.root)
 
-            var videoOptions: VideoOptions = VideoOptions.Builder().setStartMuted(true).build();
+            var videoOptions: VideoOptions = VideoOptions.Builder().setStartMuted(true).build()
             var nativeAdOption: NativeAdOptions =
                 NativeAdOptions.Builder().setVideoOptions(videoOptions).build()
             val adLoader = builder.withAdListener(object : AdListener() {
@@ -1081,8 +1077,7 @@ class PlayerActivity : AppCompatActivity() {
             override fun onAdFailedToLoad(p0: LoadAdError) {
                 super.onAdFailedToLoad(p0)
             }
-        }
-        )
+        })
     }
 
     private fun populateNativeAdView(nativeAd: NativeAd, unifiedAdBinding: AdUnifiedBinding) {
@@ -1153,7 +1148,7 @@ class PlayerActivity : AppCompatActivity() {
             unifiedAdBinding.adAdvertiser.visibility = View.INVISIBLE
         } else {
             unifiedAdBinding.adAdvertiser.text = nativeAd.advertiser
-            unifiedAdBinding.adAdvertiser.visibility = View.VISIBLE
+            unifiedAdBinding.advertiser.visibility = View.VISIBLE
         }
 
         // This method tells the Google Mobile Ads SDK that you have finished populating your
@@ -1175,14 +1170,9 @@ class PlayerActivity : AppCompatActivity() {
                     override fun onVideoEnd() {
                         // Publishers should allow native ads to complete video playback before
                         // refreshing or replacing them with another ad in the same UI location.
-                        /* mainActivityBinding.refreshButton.isEnabled = true
-                         mainActivityBinding.videostatusText.text = "Video status: Video playback has ended."*/
                         super.onVideoEnd()
                     }
                 }
-        } else {
-            /* mainActivityBinding.videostatusText.text = "Video status: Ad does not contain a video asset."
-             mainActivityBinding.refreshButton.isEnabled = true*/
         }
     }
 
@@ -1238,7 +1228,7 @@ class PlayerActivity : AppCompatActivity() {
             }
 
             override fun onFinish() {
-                isTimerRunning = false;
+                isTimerRunning = false
                 adView.visibility = View.GONE
                 player.pause()
                 Utils.menuclick.value = "timer"
@@ -1265,7 +1255,7 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     fun showDownloadDialog(uri: Uri) {
-        val builder1: Builder = Builder(this)
+        val builder1: AlertDialog.Builder = AlertDialog.Builder(this)
         builder1.setMessage("Please Select Before Proceed")
         builder1.setCancelable(true)
 
@@ -1294,5 +1284,3 @@ class PlayerActivity : AppCompatActivity() {
     }
 
 }
-
-
