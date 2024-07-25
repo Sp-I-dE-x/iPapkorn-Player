@@ -14,49 +14,54 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
 
+/**
+ * Use case to get sorted download videos from the repository.
+ *
+ * @property mediaRepository Repository to fetch media data.
+ * @property preferencesRepository Repository to fetch user preferences.
+ * @property defaultDispatcher Coroutine dispatcher for running the use case.
+ */
 class GetSortedDownloadVideosUseCase @Inject constructor(
     private val mediaRepository: MediaRepository,
     private val preferencesRepository: PreferencesRepository,
     @Dispatcher(NextDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher = Dispatchers.Default
 ) {
 
-    operator fun invoke(folderPath: String? = null): Flow<List<Video>> {
-        val videosFlow = if (folderPath != null) {
-            mediaRepository.getVideosFlowFromFolderPath("/storage/emulated/0/Download/iPapkorn")
-        } else {
-            mediaRepository.getVideosFlow()
-        }
+    /**
+     * Fetches videos from the download folder and sorts them based on user preferences.
+     *
+     * @param folderPath Optional folder path to filter videos.
+     * @return A flow emitting a sorted list of videos.
+     */
+    operator fun invoke(folderPath: String? = "/storage/emulated/0/Download/iPapkorn"): Flow<List<Video>> {
+        val videosFlow = mediaRepository.getVideosFlowFromFolderPath(folderPath)
 
-        return combine(
-            videosFlow,
-            preferencesRepository.applicationPreferences
-        ) { videoItems, preferences ->
+        return combine(videosFlow, preferencesRepository.applicationPreferences) { videoItems, preferences ->
+            val nonExcludedVideos = videoItems.filterNot { it.parentPath in preferences.excludeFolders }
 
-            val nonExcludedVideos = videoItems.filterNot {
-                it.parentPath in preferences.excludeFolders
+            val sortedVideos = when (preferences.sortOrder) {
+                SortOrder.ASCENDING -> sortVideos(nonExcludedVideos, preferences.sortBy, ascending = true)
+                SortOrder.DESCENDING -> sortVideos(nonExcludedVideos, preferences.sortBy, ascending = false)
             }
-
-            when (preferences.sortOrder) {
-                SortOrder.ASCENDING -> {
-                    when (preferences.sortBy) {
-                        SortBy.TITLE -> nonExcludedVideos.sortedBy { it.displayName.lowercase() }
-                        SortBy.LENGTH -> nonExcludedVideos.sortedBy { it.duration }
-                        SortBy.PATH -> nonExcludedVideos.sortedBy { it.path.lowercase() }
-                        SortBy.SIZE -> nonExcludedVideos.sortedBy { it.size }
-                        SortBy.DATE -> nonExcludedVideos.sortedBy { it.dateModified }
-                    }
-                }
-
-                SortOrder.DESCENDING -> {
-                    when (preferences.sortBy) {
-                        SortBy.TITLE -> nonExcludedVideos.sortedByDescending { it.displayName.lowercase() }
-                        SortBy.LENGTH -> nonExcludedVideos.sortedByDescending { it.duration }
-                        SortBy.PATH -> nonExcludedVideos.sortedByDescending { it.path.lowercase() }
-                        SortBy.SIZE -> nonExcludedVideos.sortedByDescending { it.size }
-                        SortBy.DATE -> nonExcludedVideos.sortedByDescending { it.dateModified }
-                    }
-                }
-            }
+            sortedVideos
         }.flowOn(defaultDispatcher)
+    }
+
+    /**
+     * Sorts the list of videos based on the given criteria.
+     *
+     * @param videos List of videos to be sorted.
+     * @param sortBy Criteria to sort the videos.
+     * @param ascending Whether to sort in ascending order.
+     * @return A sorted list of videos.
+     */
+    private fun sortVideos(videos: List<Video>, sortBy: SortBy, ascending: Boolean): List<Video> {
+        return when (sortBy) {
+            SortBy.TITLE -> videos.sortedWith(compareBy { it.displayName.lowercase() })
+            SortBy.LENGTH -> videos.sortedWith(compareBy { it.duration })
+            SortBy.PATH -> videos.sortedWith(compareBy { it.path.lowercase() })
+            SortBy.SIZE -> videos.sortedWith(compareBy { it.size })
+            SortBy.DATE -> videos.sortedWith(compareBy { it.dateModified })
+        }.let { if (ascending) it else it.reversed() }
     }
 }
