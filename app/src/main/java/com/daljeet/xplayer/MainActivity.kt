@@ -80,9 +80,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initializeMobileAdsSdk()
-        if (intent?.data != null) {
-            showDownloadDialog(intent.data!!)
-        }
+
+        intent?.data?.let { showDownloadDialog(it) }
 
         var uiState: MainActivityUiState by mutableStateOf(MainActivityUiState.Loading)
 
@@ -97,92 +96,7 @@ class MainActivity : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent {
-            // setting up the individual tabs
-            val homeTab = TabBarItem(
-                title = "Home",
-                selectedIcon = Icons.Filled.Home,
-                unselectedIcon = Icons.Outlined.Home,
-                root = MAIN_ROUTE
-            )
-
-            val settingsTab = TabBarItem(
-                title = "Downloads",
-                selectedIcon = ImageVector.vectorResource(id = R.drawable.baseline_download_24),
-                unselectedIcon = ImageVector.vectorResource(id = R.drawable.baseline_download_24),
-                root = "Downloads"
-            )
-
-            // creating a list of all the tabs
-            val tabBarItems = listOf(homeTab, settingsTab)
-
-            NextPlayerTheme(
-                darkTheme = shouldUseDarkTheme(uiState = uiState),
-                highContrastDarkTheme = shouldUseHighContrastDarkTheme(uiState = uiState),
-                dynamicColor = shouldUseDynamicTheming(uiState = uiState)
-            ) {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.surface
-                ) {
-                    val storagePermissionState =
-                        rememberPermissionState(permission = storagePermission)
-                    val lifecycleOwner = LocalLifecycleOwner.current
-
-                    DisposableEffect(key1 = lifecycleOwner) {
-                        val observer = LifecycleEventObserver { _, event ->
-                            if (event == Lifecycle.Event.ON_START) {
-                                storagePermissionState.launchPermissionRequest()
-                            }
-                        }
-                        lifecycleOwner.lifecycle.addObserver(observer)
-                        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
-                    }
-
-                    LaunchedEffect(key1 = storagePermissionState.status.isGranted) {
-                        if (storagePermissionState.status.isGranted) {
-                            createDirectory()
-                            synchronizer.startSync()
-                        }
-                    }
-
-                    val mainNavController = rememberNavController()
-                    val navBackStackEntry by mainNavController.currentBackStackEntryAsState()
-
-                    val bottomBarState = rememberSaveable { (mutableStateOf(true)) }
-
-                    // Control TopBar and BottomBar
-                    when (navBackStackEntry?.destination?.route) {
-                        MAIN_ROUTE, "Downloads" -> {
-                            // Show BottomBar and TopBar
-                            bottomBarState.value = true
-                        }
-                        else -> {
-                            bottomBarState.value = false
-                        }
-                    }
-
-                    Scaffold(
-                        bottomBar = {
-                            if (bottomBarState.value) {
-                                TabView(tabBarItems, mainNavController)
-                            }
-                        }
-                    ) {
-                        NavHost(navController = mainNavController, startDestination = MAIN_ROUTE) {
-                            composable(MAIN_ROUTE) {
-                                MainScreen(
-                                    permissionState = storagePermissionState,
-                                )
-                            }
-                            composable("Downloads") {
-                                DownloadScreen(
-                                    permissionState = storagePermissionState,
-                                )
-                            }
-                        }
-                    }
-                }
-            }
+            setupUI(uiState)
         }
 
         registerReceiver(onComplete, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
@@ -197,7 +111,6 @@ class MainActivity : ComponentActivity() {
         if (isMobileAdsInitializeCalled.getAndSet(true)) {
             return
         }
-        // Initialize the Mobile Ads SDK.
         MobileAds.initialize(this) {}
         val config = RequestConfiguration.Builder()
             .setTestDeviceIds(Arrays.asList("1EB6EAD9715AB41F3696FCC31586020F")).build()
@@ -219,7 +132,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private var onComplete: BroadcastReceiver = object : BroadcastReceiver() {
+    private val onComplete: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(ctxt: Context?, intent: Intent?) {
             Toast.makeText(this@MainActivity, "Download Completed", Toast.LENGTH_SHORT).show()
         }
@@ -244,8 +157,8 @@ class MainActivity : ComponentActivity() {
                     Environment.DIRECTORY_DOWNLOADS,
                     "iPapkorn/" + getFileName(uri)
                 )
-                manager?.enqueue(request)
                 request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)
+                manager?.enqueue(request)
                 dialog.cancel()
             }
             .setPositiveButton("Stream") { dialog, _ ->
@@ -276,6 +189,87 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
+    private fun setupUI(uiState: MainActivityUiState) {
+        val homeTab = TabBarItem(
+            title = "Home",
+            selectedIcon = Icons.Filled.Home,
+            unselectedIcon = Icons.Outlined.Home,
+            root = MAIN_ROUTE
+        )
+
+        val settingsTab = TabBarItem(
+            title = "Downloads",
+            selectedIcon = ImageVector.vectorResource(id = R.drawable.baseline_download_24),
+            unselectedIcon = ImageVector.vectorResource(id = R.drawable.baseline_download_24),
+            root = "Downloads"
+        )
+
+        val tabBarItems = listOf(homeTab, settingsTab)
+
+        NextPlayerTheme(
+            darkTheme = shouldUseDarkTheme(uiState = uiState),
+            highContrastDarkTheme = shouldUseHighContrastDarkTheme(uiState = uiState),
+            dynamicColor = shouldUseDynamicTheming(uiState = uiState)
+        ) {
+            Surface(
+                modifier = Modifier.fillMaxSize(),
+                color = MaterialTheme.colorScheme.surface
+            ) {
+                val storagePermissionState = rememberPermissionState(permission = storagePermission)
+                val lifecycleOwner = LocalLifecycleOwner.current
+
+                DisposableEffect(key1 = lifecycleOwner) {
+                    val observer = LifecycleEventObserver { _, event ->
+                        if (event == Lifecycle.Event.ON_START) {
+                            storagePermissionState.launchPermissionRequest()
+                        }
+                    }
+                    lifecycleOwner.lifecycle.addObserver(observer)
+                    onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+                }
+
+                LaunchedEffect(key1 = storagePermissionState.status.isGranted) {
+                    if (storagePermissionState.status.isGranted) {
+                        createDirectory()
+                        synchronizer.startSync()
+                    }
+                }
+
+                val mainNavController = rememberNavController()
+                val navBackStackEntry by mainNavController.currentBackStackEntryAsState()
+
+                val bottomBarState = rememberSaveable { mutableStateOf(true) }
+
+                when (navBackStackEntry?.destination?.route) {
+                    MAIN_ROUTE, "Downloads" -> bottomBarState.value = true
+                    else -> bottomBarState.value = false
+                }
+
+                Scaffold(
+                    bottomBar = {
+                        if (bottomBarState.value) {
+                            TabView(tabBarItems, mainNavController)
+                        }
+                    }
+                ) {
+                    NavHost(navController = mainNavController, startDestination = MAIN_ROUTE) {
+                        composable(MAIN_ROUTE) {
+                            MainScreen(
+                                permissionState = storagePermissionState,
+                            )
+                        }
+                        composable("Downloads") {
+                            DownloadScreen(
+                                permissionState = storagePermissionState,
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @Composable
     private fun shouldUseDarkTheme(uiState: MainActivityUiState): Boolean = when (uiState) {
         MainActivityUiState.Loading -> isSystemInDarkTheme()
         is MainActivityUiState.Success -> when (uiState.preferences.themeConfig) {
@@ -286,7 +280,8 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun shouldUseHighContrastDarkTheme(uiState: MainActivityUiState): Boolean = when (uiState) {
+    fun shouldUseHighContrastDarkTheme(uiState: MainActivityUiState): Boolean = when (uiState)
+    {
         MainActivityUiState.Loading -> false
         is MainActivityUiState.Success -> uiState.preferences.useHighContrastDarkTheme
     }
