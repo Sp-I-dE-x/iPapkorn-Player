@@ -22,12 +22,12 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import dev.anilbeesetti.nextplayer.core.ui.R
-import dev.anilbeesetti.nextplayer.core.ui.components.ClickablePreferenceItem
-import dev.anilbeesetti.nextplayer.core.ui.components.NextTopAppBar
-import dev.anilbeesetti.nextplayer.core.ui.components.PreferenceSwitch
-import dev.anilbeesetti.nextplayer.core.ui.designsystem.NextIcons
-import dev.anilbeesetti.nextplayer.settings.composables.PreferenceSubtitle
+import com.daljeet.xplayer.core.ui.R
+import com.daljeet.xplayer.core.ui.components.ClickablePreferenceItem
+import com.daljeet.xplayer.core.ui.components.NextTopAppBar
+import com.daljeet.xplayer.core.ui.components.PreferenceSwitch
+import com.daljeet.xplayer.core.ui.designsystem.NextIcons
+import com.daljeet.xplayer.settings.composables.PreferenceSubtitle
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
