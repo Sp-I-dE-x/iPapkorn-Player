@@ -3,10 +3,10 @@ package com.daljeet.xplayer.settings.screens.medialibrary
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.anilbeesetti.nextplayer.core.data.repository.MediaRepository
-import dev.anilbeesetti.nextplayer.core.data.repository.PreferencesRepository
-import dev.anilbeesetti.nextplayer.core.model.ApplicationPreferences
-import dev.anilbeesetti.nextplayer.core.model.Folder
+import com.daljeet.xplayer.core.data.repository.MediaRepository
+import com.daljeet.xplayer.core.data.repository.PreferencesRepository
+import com.daljeet.xplayer.core.model.ApplicationPreferences
+import com.daljeet.xplayer.core.model.Folder
 import javax.inject.Inject
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
