@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace = "com.daljeet.xplayer.feature.settings"
-    compileSdk = com.daljeet.xplayer.compileSdk.get().toInt()
+    compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()
