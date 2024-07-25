@@ -1,4 +1,4 @@
-package dev.anilbeesetti.nextplayer.feature.player.dialogs
+package com.daljeet.xplayer.feature.player.dialogs
 
 import android.app.Dialog
 import android.os.Bundle
@@ -7,8 +7,8 @@ import androidx.media3.common.C
 import androidx.media3.common.Tracks
 import androidx.media3.common.util.UnstableApi
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import dev.anilbeesetti.nextplayer.core.ui.R
-import dev.anilbeesetti.nextplayer.feature.player.extensions.getName
+import com.daljeet.xplayer.core.ui.R
+import com.daljeet.xplayer.feature.player.extensions.getName
 
 @UnstableApi
 class TrackSelectionDialogFragment(
