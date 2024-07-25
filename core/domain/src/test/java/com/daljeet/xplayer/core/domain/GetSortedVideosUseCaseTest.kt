@@ -11,7 +11,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class GetSortedVideosUseCaseTest {
 
     private val mediaRepository = FakeMediaRepository()
@@ -22,7 +21,7 @@ class GetSortedVideosUseCaseTest {
     @Test
     fun testGetSortedVideosUseCase_whenSortByTitleAscending() = runTest {
         preferencesRepository.updateApplicationPreferences {
-            it.copy(sortBy = SortBy.TITLE, sortOrder = SortOrder.ASCENDING)
+            it.copy(sortBy = Sort.By.TITLE, sortOrder = Sort.Order.ASCENDING)
         }
 
         mediaRepository.videos.addAll(testVideoItems.shuffled())
@@ -35,7 +34,7 @@ class GetSortedVideosUseCaseTest {
     @Test
     fun testGetSortedVideosUseCase_whenSortByTitleDescending() = runTest {
         preferencesRepository.updateApplicationPreferences {
-            it.copy(sortBy = SortBy.TITLE, sortOrder = SortOrder.DESCENDING)
+            it.copy(sortBy = Sort.By.TITLE, sortOrder = Sort.Order.DESCENDING)
         }
 
         mediaRepository.videos.addAll(testVideoItems.shuffled())
@@ -48,7 +47,7 @@ class GetSortedVideosUseCaseTest {
     @Test
     fun testGetSortedVideosUseCase_whenSortByDurationAscending() = runTest {
         preferencesRepository.updateApplicationPreferences {
-            it.copy(sortBy = SortBy.LENGTH, sortOrder = SortOrder.ASCENDING)
+            it.copy(sortBy = Sort.By.LENGTH, sortOrder = Sort.Order.ASCENDING)
         }
 
         mediaRepository.videos.addAll(testVideoItems.shuffled())
@@ -61,7 +60,7 @@ class GetSortedVideosUseCaseTest {
     @Test
     fun testGetSortedVideosUseCase_whenSortByDurationDescending() = runTest {
         preferencesRepository.updateApplicationPreferences {
-            it.copy(sortBy = SortBy.LENGTH, sortOrder = SortOrder.DESCENDING)
+            it.copy(sortBy = Sort.By.LENGTH, sortOrder = Sort.Order.DESCENDING)
         }
 
         mediaRepository.videos.addAll(testVideoItems.shuffled())
@@ -74,7 +73,7 @@ class GetSortedVideosUseCaseTest {
     @Test
     fun testGetSortedVideosUseCase_whenSortByPathAscending() = runTest {
         preferencesRepository.updateApplicationPreferences {
-            it.copy(sortBy = SortBy.PATH, sortOrder = SortOrder.ASCENDING)
+            it.copy(sortBy = Sort.By.PATH, sortOrder = Sort.Order.ASCENDING)
         }
 
         mediaRepository.videos.addAll(testVideoItems.shuffled())
@@ -87,7 +86,7 @@ class GetSortedVideosUseCaseTest {
     @Test
     fun testGetSortedVideosUseCase_whenSortByPathDescending() = runTest {
         preferencesRepository.updateApplicationPreferences {
-            it.copy(sortBy = SortBy.PATH, sortOrder = SortOrder.DESCENDING)
+            it.copy(sortBy = Sort.By.PATH, sortOrder = Sort.Order.DESCENDING)
         }
 
         mediaRepository.videos.addAll(testVideoItems.shuffled())
@@ -100,7 +99,7 @@ class GetSortedVideosUseCaseTest {
     @Test
     fun testGetSortedVideosUseCase_whenSortBySizeAscending() = runTest {
         preferencesRepository.updateApplicationPreferences {
-            it.copy(sortBy = SortBy.SIZE, sortOrder = SortOrder.ASCENDING)
+            it.copy(sortBy = Sort.By.SIZE, sortOrder = Sort.Order.ASCENDING)
         }
 
         mediaRepository.videos.addAll(testVideoItems.shuffled())
@@ -113,7 +112,7 @@ class GetSortedVideosUseCaseTest {
     @Test
     fun testGetSortedVideosUseCase_whenSortBySizeDescending() = runTest {
         preferencesRepository.updateApplicationPreferences {
-            it.copy(sortBy = SortBy.SIZE, sortOrder = SortOrder.DESCENDING)
+            it.copy(sortBy = Sort.By.SIZE, sortOrder = Sort.Order.DESCENDING)
         }
 
         mediaRepository.videos.addAll(testVideoItems.shuffled())
@@ -137,7 +136,7 @@ val testVideoItems = listOf(
         nameWithExtension = "A.mp4",
         width = 1080,
         path = "/storage/emulated/0/DCIM/Camera/A.mp4",
-        size = 1000
+        size = 1000,
     ),
     Video(
         id = 2,
@@ -148,7 +147,7 @@ val testVideoItems = listOf(
         nameWithExtension = "B.mp4",
         width = 1080,
         path = "/storage/emulated/0/DCIM/Camera/B.mp4",
-        size = 2000
+        size = 2000,
     ),
     Video(
         id = 3,
@@ -159,7 +158,7 @@ val testVideoItems = listOf(
         nameWithExtension = "C.mp4",
         width = 1080,
         path = "/storage/emulated/0/DCIM/Camera/C.mp4",
-        size = 3000
+        size = 3000,
     ),
     Video(
         id = 4,
@@ -170,7 +169,7 @@ val testVideoItems = listOf(
         nameWithExtension = "D.mp4",
         width = 1080,
         path = "/storage/emulated/0/DCIM/Camera/D.mp4",
-        size = 4000
+        size = 4000,
     ),
     Video(
         id = 5,
@@ -181,7 +180,7 @@ val testVideoItems = listOf(
         nameWithExtension = "E.mp4",
         width = 1080,
         path = "/storage/emulated/0/DCIM/Camera/E.mp4",
-        size = 5000
+        size = 5000,
     ),
     Video(
         id = 6,
@@ -192,7 +191,7 @@ val testVideoItems = listOf(
         nameWithExtension = "F.mp4",
         width = 1080,
         path = "/storage/emulated/0/DCIM/Camera/F.mp4",
-        size = 6000
+        size = 6000,
     ),
     Video(
         id = 7,
@@ -203,7 +202,7 @@ val testVideoItems = listOf(
         nameWithExtension = "G.mp4",
         width = 1080,
         path = "/storage/emulated/0/DCIM/Camera/G.mp4",
-        size = 7000
+        size = 7000,
     ),
     Video(
         id = 8,
@@ -214,7 +213,7 @@ val testVideoItems = listOf(
         nameWithExtension = "H.mp4",
         width = 1080,
         path = "/storage/emulated/0/DCIM/Camera/H.mp4",
-        size = 8000
+        size = 8000,
     ),
     Video(
         id = 9,
@@ -225,7 +224,7 @@ val testVideoItems = listOf(
         nameWithExtension = "I.mp4",
         width = 1080,
         path = "/storage/emulated/0/DCIM/Camera/I.mp4",
-        size = 9000
+        size = 9000,
     ),
     Video(
         id = 10,
@@ -236,6 +235,6 @@ val testVideoItems = listOf(
         nameWithExtension = "J.mp4",
         width = 1080,
         path = "/storage/emulated/0/DCIM/Camera/J.mp4",
-        size = 10000
-    )
+        size = 10000,
+    ),
 )
