@@ -64,3 +64,9 @@ class MediaLibraryPreferencesViewModel @Inject constructor(
         }
     }
 }
+
+sealed interface FolderPreferencesUiState {
+    object Loading : FolderPreferencesUiState
+
+    data class Success(val directories: List<Folder>) : FolderPreferencesUiState
+}
