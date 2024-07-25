@@ -34,6 +34,6 @@ fun NextSwitch(
         onCheckedChange = onCheckedChange,
         modifier = modifier,
         enabled = enabled,
-        thumbContent = thumbContent
+        thumbContent = thumbContent,
     )
 }
