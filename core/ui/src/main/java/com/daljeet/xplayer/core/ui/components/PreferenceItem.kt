@@ -135,7 +135,7 @@ fun PreferenceItemPreview() {
 fun SelectablePreferencePreview() {
     SelectablePreference(
         title = "Title",
-        description = "Description of the preference item goes here."
+        description = "Description of the preference item goes here.",
     )
 }
 
