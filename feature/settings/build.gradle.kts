@@ -7,8 +7,8 @@ plugins {
 }
 
 android {
-    namespace = "dev.anilbeesetti.nextplayer.feature.settings"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
+    namespace = "com.daljeet.xplayer.feature.settings"
+    compileSdk = com.daljeet.xplayer.compileSdk.get().toInt()
 
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()
