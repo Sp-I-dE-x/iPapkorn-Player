@@ -56,7 +56,7 @@ object NextDialogDefaults {
         usePlatformDefaultWidth = false,
         dismissOnBackPress = true,
         dismissOnClickOutside = true,
-        decorFitsSystemWindows = true
+        decorFitsSystemWindows = true,
     )
     val dialogMargin: Dp = 16.dp
 }
