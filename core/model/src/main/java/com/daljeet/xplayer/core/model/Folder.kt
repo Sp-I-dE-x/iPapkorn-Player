@@ -16,7 +16,7 @@ data class Folder(
             mediaSize = 1024,
             mediaCount = 1,
             dateModified = 2000,
-            formattedMediaSize = "1KB"
+            formattedMediaSize = "1KB",
         )
     }
 }
