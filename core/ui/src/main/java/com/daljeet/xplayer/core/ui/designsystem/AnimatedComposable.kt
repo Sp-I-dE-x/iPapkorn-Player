@@ -30,5 +30,5 @@ fun NavGraphBuilder.animatedComposable(
     popExitTransition = {
         slideOutHorizontally(targetOffsetX = { it }, animationSpec = tween(220)) + fadeOut(animationSpec = tween(220))
     },
-    content = content
+    content = content,
 )
