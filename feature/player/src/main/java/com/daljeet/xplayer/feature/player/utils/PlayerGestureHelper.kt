@@ -7,18 +7,18 @@ import android.view.ScaleGestureDetector
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
-import dev.anilbeesetti.nextplayer.core.common.Utils
-import dev.anilbeesetti.nextplayer.core.common.extensions.dpToPx
-import dev.anilbeesetti.nextplayer.core.model.DoubleTapGesture
-import dev.anilbeesetti.nextplayer.core.model.PlayerPreferences
-import dev.anilbeesetti.nextplayer.core.ui.R as coreUiR
-import dev.anilbeesetti.nextplayer.feature.player.PlayerActivity
-import dev.anilbeesetti.nextplayer.feature.player.PlayerViewModel
-import dev.anilbeesetti.nextplayer.feature.player.R
-import dev.anilbeesetti.nextplayer.feature.player.extensions.seekBack
-import dev.anilbeesetti.nextplayer.feature.player.extensions.seekForward
-import dev.anilbeesetti.nextplayer.feature.player.extensions.shouldFastSeek
-import dev.anilbeesetti.nextplayer.feature.player.extensions.togglePlayPause
+import com.daljeet.xplayer.core.common.Utils
+import com.daljeet.xplayer.core.common.extensions.dpToPx
+import com.daljeet.xplayer.core.model.DoubleTapGesture
+import com.daljeet.xplayer.core.model.PlayerPreferences
+import com.daljeet.xplayer.core.ui.R as coreUiR
+import com.daljeet.xplayer.feature.player.PlayerActivity
+import com.daljeet.xplayer.feature.player.PlayerViewModel
+import com.daljeet.xplayer.feature.player.R
+import com.daljeet.xplayer.feature.player.extensions.seekBack
+import com.daljeet.xplayer.feature.player.extensions.seekForward
+import com.daljeet.xplayer.feature.player.extensions.shouldFastSeek
+import com.daljeet.xplayer.feature.player.extensions.togglePlayPause
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
