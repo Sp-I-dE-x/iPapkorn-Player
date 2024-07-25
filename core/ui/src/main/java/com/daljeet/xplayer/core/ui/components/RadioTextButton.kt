@@ -34,7 +34,7 @@ fun RadioTextButton(
     ) {
         RadioButton(
             selected = selected,
-            onClick = null
+            onClick = null,
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(text = text)
