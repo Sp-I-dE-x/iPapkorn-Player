@@ -36,7 +36,21 @@ fun NavGraphBuilder.mediaNavGraph(
     }
 }
 
-fun Context.startPlayerActivity(uri: Uri) {
-    val intent = Intent(Intent.ACTION_VIEW, uri, this, PlayerActivity::class.java)
-    startActivity(intent)
+/**
+ * Starts the PlayerActivity to play a video from the given URI.
+ *
+ * @param uri The URI of the video to be played.
+ */
+fun Context.startPlayerActivity(uri: Uri?) {
+    uri?.let {
+        val intent = Intent(this, PlayerActivity::class.java).apply {
+            action = Intent.ACTION_VIEW
+            data = uri
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        }
+        startActivity(intent)
+    } ?: run {
+        // Handle the case where the URI is null
+        // This could be a log message or a user-facing error message
+    }
 }
