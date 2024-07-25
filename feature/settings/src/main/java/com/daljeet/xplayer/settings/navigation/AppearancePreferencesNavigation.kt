@@ -15,6 +15,6 @@ fun NavController.navigateToAppearancePreferences(navOptions: NavOptions? = navO
 
 fun NavGraphBuilder.appearancePreferencesScreen(onNavigateUp: () -> Unit) {
     animatedComposable(route = appearancePreferencesNavigationRoute) {
-        AppearancePreferencesScreen(onNavigateUp = onNavigateUp),
+        AppearancePreferencesScreen(onNavigateUp = onNavigateUp)
     }
 }
