@@ -3,9 +3,9 @@ package com.daljeet.xplayer.feature.player.utils
 import android.content.Intent
 import android.net.Uri
 import androidx.media3.common.C
-import dev.anilbeesetti.nextplayer.feature.player.PlayerActivity
-import dev.anilbeesetti.nextplayer.feature.player.extensions.getParcelableUriArray
-import dev.anilbeesetti.nextplayer.feature.player.model.Subtitle
+import com.daljeet.xplayer.feature.player.PlayerActivity
+import com.daljeet.xplayer.feature.player.extensions.getParcelableUriArray
+import com.daljeet.xplayer.feature.player.model.Subtitle
 
 class PlayerApi(val activity: PlayerActivity) {
 
