@@ -36,7 +36,7 @@ data class Video(
             height = 1080,
             size = 1000,
             formattedDuration = "29.36",
-            formattedFileSize = "320KB"
+            formattedFileSize = "320KB",
         )
     }
 }
