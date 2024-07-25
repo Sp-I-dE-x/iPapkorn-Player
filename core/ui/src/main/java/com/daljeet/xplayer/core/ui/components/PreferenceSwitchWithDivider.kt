@@ -101,7 +101,7 @@ fun PreferenceCheckbox(
         content = {
             Checkbox(
                 checked = isChecked,
-                onCheckedChange = null
+                onCheckedChange = null,
             )
         }
     )
