@@ -25,6 +25,11 @@ import com.daljeet.xplayer.settings.navigation.subtitlePreferencesScreen
 
 const val SETTINGS_ROUTE = "settings_nav_route"
 
+/**
+ * Builds the navigation graph for the settings section.
+ *
+ * @param navController The NavHostController used to manage navigation actions.
+ */
 fun NavGraphBuilder.settingsNavGraph(
     navController: NavHostController
 ) {
@@ -35,14 +40,14 @@ fun NavGraphBuilder.settingsNavGraph(
         settingsScreen(
             onNavigateUp = navController::navigateUp,
             onItemClick = { setting ->
-               when (setting) {
+                when (setting) {
                     Setting.APPEARANCE -> navController.navigateToAppearancePreferences()
                     Setting.MEDIA_LIBRARY -> navController.navigateToMediaLibraryPreferencesScreen()
                     Setting.PLAYER -> navController.navigateToPlayerPreferences()
                     Setting.DECODER -> navController.navigateToDecoderPreferences()
                     Setting.AUDIO -> navController.navigateToAudioPreferences()
                     Setting.SUBTITLE -> navController.navigateToSubtitlePreferences()
-                   Setting.ABOUT -> navController.navigateToAboutPreferences()
+                    Setting.ABOUT -> navController.navigateToAboutPreferences()
                 }
             }
         )
@@ -73,3 +78,12 @@ fun NavGraphBuilder.settingsNavGraph(
         )
     }
 }
+
+/**
+ * Extension function to handle navigation to the Appearance Preferences screen.
+ */
+fun NavHostController.navigateToAppearancePreferences() {
+    this.navigate("appearance_preferences")
+}
+
+// Similar extension functions for other settings navigation routes can be added here
