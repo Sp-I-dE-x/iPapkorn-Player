@@ -40,6 +40,6 @@ private fun ClickablePreferenceItemPreview() {
         description = "Description of the preference item goes here.",
         icon = NextIcons.DoubleTap,
         onClick = {},
-        enabled = false
+        enabled = false,
     )
 }
