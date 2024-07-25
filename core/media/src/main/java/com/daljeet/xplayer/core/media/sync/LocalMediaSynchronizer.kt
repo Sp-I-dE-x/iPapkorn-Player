@@ -39,10 +39,14 @@ class LocalMediaSynchronizer @Inject constructor(
     private val directoryDao: DirectoryDao,
     @ApplicationScope private val applicationScope: CoroutineScope,
     @ApplicationContext private val context: Context,
-    @Dispatcher(NextDispatchers.IO) private val dispatcher: CoroutineDispatcher
+    @Dispatcher(NextDispatchers.IO) private val dispatcher: CoroutineDispatcher,
 ) : MediaSynchronizer {
 
     private var mediaSyncingJob: Job? = null
+
+    override suspend fun refresh(path: String?): Boolean {
+        return path?.let { context.scanPaths(listOf(path)) } ?: context.scanStorage()
+    }
 
     override fun startSync() {
         if (mediaSyncingJob != null) return
@@ -57,15 +61,13 @@ class LocalMediaSynchronizer @Inject constructor(
     }
 
     private suspend fun updateDirectories(media: List<MediaVideo>) = withContext(
-        Dispatchers.Default
+        Dispatchers.Default,
     ) {
-        val directories = media.groupBy { File(it.data).parentFile!! }.map { (file, videos) ->
+        val directories = media.groupBy { File(it.data).parentFile!! }.map { (file, _) ->
             DirectoryEntity(
                 path = file.path,
                 name = file.prettyName,
-                mediaCount = videos.size,
-                size = videos.sumOf { it.size },
-                modified = file.lastModified()
+                modified = file.lastModified(),
             )
         }
         directoryDao.upsertAll(directories)
@@ -83,15 +85,16 @@ class LocalMediaSynchronizer @Inject constructor(
     private suspend fun updateMedia(media: List<MediaVideo>) = withContext(Dispatchers.Default) {
         val mediumEntities = media.map {
             val file = File(it.data)
-            val mediumEntity = mediumDao.get(it.data)
+            val mediumEntity = mediumDao.get(it.uri.toString())
             mediumEntity?.copy(
                 uriString = it.uri.toString(),
                 modified = it.dateModified,
+                name = file.name,
                 size = it.size,
                 width = it.width,
                 height = it.height,
                 duration = it.duration,
-                mediaStoreId = it.id
+                mediaStoreId = it.id,
             ) ?: MediumEntity(
                 path = it.data,
                 uriString = it.uri.toString(),
@@ -102,20 +105,20 @@ class LocalMediaSynchronizer @Inject constructor(
                 width = it.width,
                 height = it.height,
                 duration = it.duration,
-                mediaStoreId = it.id
+                mediaStoreId = it.id,
             )
         }
 
         mediumDao.upsertAll(mediumEntities)
 
-        val currentMediaPaths = mediumEntities.map { it.path }
+        val currentMediaUris = mediumEntities.map { it.uriString }
 
         val unwantedMedia = mediumDao.getAll().first()
-            .filterNot { it.path in currentMediaPaths }
+            .filterNot { it.uriString in currentMediaUris }
 
-        val unwantedMediaPaths = unwantedMedia.map { it.path }
+        val unwantedMediaUris = unwantedMedia.map { it.uriString }
 
-        mediumDao.delete(unwantedMediaPaths)
+        mediumDao.delete(unwantedMediaUris)
 
         // Delete unwanted thumbnails
         val unwantedThumbnailFiles = unwantedMedia.mapNotNull { medium -> medium.thumbnailPath?.let { File(it) } }
@@ -148,7 +151,7 @@ class LocalMediaSynchronizer @Inject constructor(
     private fun getMediaVideosFlow(
         selection: String? = null,
         selectionArgs: Array<String>? = null,
-        sortOrder: String? = "${MediaStore.Video.Media.DISPLAY_NAME} ASC"
+        sortOrder: String? = "${MediaStore.Video.Media.DISPLAY_NAME} ASC",
     ): Flow<List<MediaVideo>> = callbackFlow {
         val observer = object : ContentObserver(null) {
             override fun onChange(selfChange: Boolean) {
@@ -165,7 +168,7 @@ class LocalMediaSynchronizer @Inject constructor(
     private fun getMediaVideo(
         selection: String?,
         selectionArgs: Array<String>?,
-        sortOrder: String?
+        sortOrder: String?,
     ): List<MediaVideo> {
         val mediaVideos = mutableListOf<MediaVideo>()
         context.contentResolver.query(
@@ -173,7 +176,7 @@ class LocalMediaSynchronizer @Inject constructor(
             VIDEO_PROJECTION,
             selection,
             selectionArgs,
-            sortOrder
+            sortOrder,
         )?.use { cursor ->
 
             val idColumn = cursor.getColumnIndex(MediaStore.Video.Media._ID)
@@ -195,8 +198,8 @@ class LocalMediaSynchronizer @Inject constructor(
                         width = cursor.getInt(widthColumn),
                         height = cursor.getInt(heightColumn),
                         size = cursor.getLong(sizeColumn),
-                        dateModified = cursor.getLong(dateModifiedColumn)
-                    )
+                        dateModified = cursor.getLong(dateModifiedColumn),
+                    ),
                 )
             }
         }
@@ -211,7 +214,7 @@ class LocalMediaSynchronizer @Inject constructor(
             MediaStore.Video.Media.HEIGHT,
             MediaStore.Video.Media.WIDTH,
             MediaStore.Video.Media.SIZE,
-            MediaStore.Video.Media.DATE_MODIFIED
+            MediaStore.Video.Media.DATE_MODIFIED,
         )
     }
 }
