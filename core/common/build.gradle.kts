@@ -1,10 +1,26 @@
 plugins {
-    id("xplayer.android.library")
-    id("xplayer.android.hilt")
+    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.ksp)
 }
 
 android {
-    namespace = "com.daljeet.xplayer.core.common"
+    namespace = "dev.anilbeesetti.nextplayer.core.common"
+    compileSdk = libs.versions.android.compileSdk.get().toInt()
+
+    defaultConfig {
+        minSdk = libs.versions.android.minSdk.get().toInt()
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.toVersion(libs.versions.android.jvm.get().toInt())
+        targetCompatibility = JavaVersion.toVersion(libs.versions.android.jvm.get().toInt())
+    }
+
+    kotlinOptions {
+        jvmTarget = libs.versions.android.jvm.get()
+    }
 }
 
 dependencies {
@@ -13,7 +29,7 @@ dependencies {
 
     implementation(libs.github.albfernandez.juniversalchardet)
 
-    testImplementation(libs.junit4)
-    androidTestImplementation(libs.androidx.test.ext)
-    androidTestImplementation(libs.androidx.test.espresso.core)
-}
+    // Hilt
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
+    kspAndroidTest(libs.hilt.compiler)
