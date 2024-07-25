@@ -3,10 +3,10 @@ package com.daljeet.xplayer.settings.screens.medialibrary
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import com.daljeet.xplayer.core.data.repository.MediaRepository
-import com.daljeet.xplayer.core.data.repository.PreferencesRepository
-import com.daljeet.xplayer.core.model.ApplicationPreferences
-import com.daljeet.xplayer.core.model.Folder
+import dev.anilbeesetti.nextplayer.core.data.repository.MediaRepository
+import dev.anilbeesetti.nextplayer.core.data.repository.PreferencesRepository
+import dev.anilbeesetti.nextplayer.core.model.ApplicationPreferences
+import dev.anilbeesetti.nextplayer.core.model.Folder
 import javax.inject.Inject
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 class MediaLibraryPreferencesViewModel @Inject constructor(
     mediaRepository: MediaRepository,
-    private val preferencesRepository: PreferencesRepository
+    private val preferencesRepository: PreferencesRepository,
 ) : ViewModel() {
 
     val uiState = mediaRepository.getFoldersFlow()
@@ -24,14 +24,14 @@ class MediaLibraryPreferencesViewModel @Inject constructor(
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
-            initialValue = FolderPreferencesUiState.Loading
+            initialValue = FolderPreferencesUiState.Loading,
         )
 
     val preferences = preferencesRepository.applicationPreferences
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
-            initialValue = ApplicationPreferences()
+            initialValue = ApplicationPreferences(),
         )
 
     fun updateExcludeList(path: String) {
@@ -42,15 +42,25 @@ class MediaLibraryPreferencesViewModel @Inject constructor(
                         it.excludeFolders - path
                     } else {
                         it.excludeFolders + path
-                    }
+                    },
                 )
             }
         }
     }
-}
 
-sealed interface FolderPreferencesUiState {
-    object Loading : FolderPreferencesUiState
+    fun toggleShowFloatingPlayButton() {
+        viewModelScope.launch {
+            preferencesRepository.updateApplicationPreferences {
+                it.copy(showFloatingPlayButton = !it.showFloatingPlayButton)
+            }
+        }
+    }
 
-    data class Success(val directories: List<Folder>) : FolderPreferencesUiState
+    fun toggleMarkLastPlayedMedia() {
+        viewModelScope.launch {
+            preferencesRepository.updateApplicationPreferences {
+                it.copy(markLastPlayedMedia = !it.markLastPlayedMedia)
+            }
+        }
+    }
 }
