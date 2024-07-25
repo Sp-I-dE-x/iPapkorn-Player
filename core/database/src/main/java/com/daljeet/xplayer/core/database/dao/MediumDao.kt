@@ -4,11 +4,11 @@ import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Upsert
-import dev.anilbeesetti.nextplayer.core.database.entities.AudioStreamInfoEntity
-import dev.anilbeesetti.nextplayer.core.database.entities.MediumEntity
-import dev.anilbeesetti.nextplayer.core.database.entities.SubtitleStreamInfoEntity
-import dev.anilbeesetti.nextplayer.core.database.entities.VideoStreamInfoEntity
-import dev.anilbeesetti.nextplayer.core.database.relations.MediumWithInfo
+import com.daljeet.xplayer.core.database.entities.AudioStreamInfoEntity
+import com.daljeet.xplayer.core.database.entities.MediumEntity
+import com.daljeet.xplayer.core.database.entities.SubtitleStreamInfoEntity
+import com.daljeet.xplayer.core.database.entities.VideoStreamInfoEntity
+import com.daljeet.xplayer.core.database.relations.MediumWithInfo
 import kotlinx.coroutines.flow.Flow
 
 @Dao
