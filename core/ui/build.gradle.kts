@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.dsljeet.xplayer.core.ui"
+    namespace = "com.daljeet.xplayer.core.ui"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
