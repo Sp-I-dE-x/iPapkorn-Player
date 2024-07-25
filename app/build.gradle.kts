@@ -14,8 +14,8 @@ android {
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         applicationId = "com.daljeet.xplayer"
-        versionCode = 23
-        versionName = "0.10.9"
+        versionCode = 16
+        versionName = "0.11.1"
     }
 
     buildFeatures {
