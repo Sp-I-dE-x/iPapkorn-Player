@@ -3,6 +3,7 @@ package com.daljeet.xplayer.core.common.extensions
 import android.app.UiModeManager
 import android.content.ContentResolver
 import android.content.ContentUris
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -29,6 +30,7 @@ import java.io.FileWriter
 import java.io.InputStreamReader
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
+import kotlin.coroutines.suspendCoroutine
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.mozilla.universalchardet.UniversalDetector
@@ -68,7 +70,7 @@ fun Context.getPath(uri: Uri): String? {
                     return try {
                         val contentUri = ContentUris.withAppendedId(
                             Uri.parse("content://downloads/public_downloads"),
-                            docId.toLong()
+                            docId.toLong(),
                         )
                         getDataColumn(contentUri, null, null)
                     } catch (e: Exception) {
@@ -90,7 +92,7 @@ fun Context.getPath(uri: Uri): String? {
                 }
                 val selection = "_id=?"
                 val selectionArgs = arrayOf(
-                    split[1]
+                    split[1],
                 )
                 return contentUri?.let { getDataColumn(it, selection, selectionArgs) }
             }
@@ -117,7 +119,7 @@ fun Context.getPath(uri: Uri): String? {
 private fun Context.getDataColumn(
     uri: Uri,
     selection: String? = null,
-    selectionArgs: Array<String>? = null
+    selectionArgs: Array<String>? = null,
 ): String? {
     var cursor: Cursor? = null
     val column = MediaStore.Images.Media.DATA
@@ -156,7 +158,7 @@ fun Context.getFilenameFromUri(uri: Uri): String {
  */
 fun Context.getFilenameFromContentUri(uri: Uri): String? {
     val projection = arrayOf(
-        OpenableColumns.DISPLAY_NAME
+        OpenableColumns.DISPLAY_NAME,
     )
 
     try {
@@ -184,7 +186,7 @@ fun Context.getMediaContentUri(uri: Uri): Uri? {
             projection,
             "${MediaStore.Images.Media.DATA} = ?",
             arrayOf(path),
-            null
+            null,
         )
         if (cursor != null && cursor.moveToFirst()) {
             val index = cursor.getColumnIndexOrThrow(column)
@@ -203,38 +205,40 @@ fun Context.showToast(string: String, duration: Int = Toast.LENGTH_SHORT) {
     Toast.makeText(this, string, duration).show()
 }
 
-suspend fun Context.scanPaths(
-    paths: List<String>,
-    callback: ((String?, Uri?) -> Unit)? = null
-) = withContext(Dispatchers.IO) {
-    MediaScannerConnection.scanFile(
-        this@scanPaths,
-        paths.toTypedArray(),
-        arrayOf("video/*"),
-        callback
-    )
-}
-
-suspend fun Context.scanPath(file: File) {
-    withContext(Dispatchers.IO) {
-        if (file.isDirectory) {
-            file.listFiles()?.forEach { scanPath(it) }
-        } else {
-            scanPaths(listOf(file.path))
+suspend fun Context.scanPaths(paths: List<String>): Boolean = suspendCoroutine { continuation ->
+    try {
+        MediaScannerConnection.scanFile(
+            this@scanPaths,
+            paths.toTypedArray(),
+            arrayOf("video/*"),
+        ) { path, uri ->
+            Log.d("ScanPath", "scanPaths: path=$path, uri=$uri")
+            continuation.resumeWith(Result.success(true))
         }
+    } catch (e: Exception) {
+        continuation.resumeWith(Result.failure(e))
     }
 }
 
-suspend fun Context.scanStorage(callback: ((String?, Uri?) -> Unit)? = null) = withContext(Dispatchers.IO) {
-    val storagePath = Environment.getExternalStorageDirectory()?.path
+suspend fun Context.scanPath(file: File): Boolean {
+    return if (file.isDirectory) {
+        file.listFiles()?.all { scanPath(it) } ?: true
+    } else {
+        scanPaths(listOf(file.path))
+    }
+}
+
+suspend fun Context.scanStorage(
+    storagePath: String? = Environment.getExternalStorageDirectory()?.path,
+): Boolean = withContext(Dispatchers.IO) {
     if (storagePath != null) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            scanPaths(listOf(storagePath), callback)
+        return@withContext if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            scanPaths(listOf(storagePath))
         } else {
             scanPath(File(storagePath))
         }
     } else {
-        callback?.invoke(null, null)
+        false
     }
 }
 
@@ -254,25 +258,8 @@ fun Context.convertToUTF8(uri: Uri, charset: Charset?): Uri {
 }
 
 fun detectCharset(inputStream: BufferedInputStream): Charset {
-    val bufferSize = 8000
-    inputStream.mark(bufferSize)
-    val rawInput = ByteArray(bufferSize)
-
-    var rawLength = 0
-    var remainingLength = bufferSize
-    while (remainingLength > 0) {
-        // read() may give data in smallish chunks, esp. for remote sources.  Hence, this loop.
-        val bytesRead = inputStream.read(rawInput, rawLength, remainingLength)
-        if (bytesRead <= 0) {
-            break
-        }
-        rawLength += bytesRead
-        remainingLength -= bytesRead
-    }
-    inputStream.reset()
-
     val charsetDetector = UniversalDetector()
-    charsetDetector.handleData(rawInput)
+    charsetDetector.handleData(inputStream.readBytes())
     charsetDetector.dataEnd()
 
     val encoding = charsetDetector.detectedCharset
@@ -378,3 +365,32 @@ val Context.thumbnailCacheDir: File
         if (!dir.exists()) dir.mkdir()
         return dir
     }
+
+suspend fun ContentResolver.updateMedia(
+    uri: Uri,
+    contentValues: ContentValues,
+): Boolean = withContext(Dispatchers.IO) {
+    return@withContext try {
+        update(
+            uri,
+            contentValues,
+            null,
+            null,
+        ) > 0
+    } catch (e: Exception) {
+        e.printStackTrace()
+        false
+    }
+}
+
+suspend fun ContentResolver.deleteMedia(
+    uri: Uri,
+): Boolean = withContext(Dispatchers.IO) {
+    return@withContext try {
+        delete(uri, null, null) > 0
+    } catch (e: Exception) {
+        e.printStackTrace()
+        false
+    }
+}
+
