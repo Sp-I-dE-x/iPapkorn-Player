@@ -99,7 +99,7 @@ class VideoPickerPreviewParameterProvider : PreviewParameterProvider<List<Video>
                     displayName = "Star Wars: Episode IV - A New Hope (1977) 2160p BluRay x264",
                     width = 3840,
                     height = 2160,
-                    size = 8000
+                    size = 8000,
                 )
             )
         )
