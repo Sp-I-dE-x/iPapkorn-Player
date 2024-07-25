@@ -1,21 +1,35 @@
 plugins {
-    id("xplayer.android.application")
-    id("xplayer.android.application.compose")
-    id("xplayer.android.hilt")
+    alias(libs.plugins.androidApplication)
+    alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.ksp)
 }
 
 android {
     namespace = "com.daljeet.xplayer"
 
+    compileSdk = libs.versions.android.compileSdk.get().toInt()
     defaultConfig {
+        minSdk = libs.versions.android.minSdk.get().toInt()
+        targetSdk = libs.versions.android.targetSdk.get().toInt()
         applicationId = "com.daljeet.xplayer"
-        versionCode = 22
-        versionName = "0.10.8"
-        targetSdk = 34
+        versionCode = 23
+        versionName = "0.10.9"
     }
 
     buildFeatures {
+        compose = true
         buildConfig = true
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.toVersion(libs.versions.android.jvm.get().toInt())
+        targetCompatibility = JavaVersion.toVersion(libs.versions.android.jvm.get().toInt())
+    }
+
+    kotlinOptions {
+        jvmTarget = libs.versions.android.jvm.get()
     }
 
     buildTypes {
@@ -24,7 +38,7 @@ android {
             isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
 
@@ -60,29 +74,35 @@ dependencies {
     implementation(project(":feature:videopicker"))
     implementation(project(":feature:player"))
     implementation(project(":feature:settings"))
-    implementation(libs.play.services.ads)
 
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.bundles.compose)
+    implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.appcompat)
+
+    // Compose
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.runtimeCompose)
+
     implementation(libs.google.android.material)
     implementation(libs.androidx.core.splashscreen)
 
-    implementation(libs.accompanist.permissions)
-
+    // Hilt
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
+    kspAndroidTest(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
 
+    implementation(libs.accompanist.permissions)
+
     implementation(libs.timber)
-    implementation(libs.androidx.lifecycle.process)
-    implementation(libs.androidx.navigation.compose.v277)
-
-
-    implementation("androidx.lifecycle:lifecycle-runtime:2.3.1")
-    implementation("androidx.lifecycle:lifecycle-compiler:2.3.1")
-
 
     testImplementation(libs.junit4)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.test.ext)
     androidTestImplementation(libs.androidx.test.espresso.core)
     androidTestImplementation(libs.androidx.compose.ui.test)
