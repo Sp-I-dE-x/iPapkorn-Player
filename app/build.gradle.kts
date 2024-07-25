@@ -24,8 +24,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.toVersion(libs.versions.android.jvm.get().toInt())
-        targetCompatibility = JavaVersion.toVersion(libs.versions.android.jvm.get().toInt())
+        sourceCompatibility = JavaVersion.toVersion(libs.versions.android.jvm.get())
+        targetCompatibility = JavaVersion.toVersion(libs.versions.android.jvm.get())
     }
 
     kotlinOptions {
@@ -38,7 +38,7 @@ android {
             isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro",
+                "proguard-rules.pro"
             )
         }
 
