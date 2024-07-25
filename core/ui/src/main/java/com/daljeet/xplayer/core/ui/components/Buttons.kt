@@ -7,16 +7,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.daljeet.xplayer.core.ui.R
 
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import dev.anilbeesetti.nextplayer.core.ui.R
+
 @Composable
 fun DoneButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    enabled: Boolean = true
+    enabled: Boolean = true,
 ) {
     TextButton(
         enabled = enabled,
         onClick = onClick,
-        modifier = modifier
+        modifier = modifier,
     ) {
         Text(text = stringResource(R.string.done))
     }
@@ -26,12 +33,12 @@ fun DoneButton(
 fun CancelButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    enabled: Boolean = true
+    enabled: Boolean = true,
 ) {
     TextButton(
         enabled = enabled,
         onClick = onClick,
-        modifier = modifier
+        modifier = modifier,
     ) {
         Text(text = stringResource(R.string.cancel))
     }
