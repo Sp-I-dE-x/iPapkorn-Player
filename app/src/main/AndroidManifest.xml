@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
@@ -47,6 +48,7 @@
                 <data android:scheme="httplive" />
                 <data android:scheme="udp" />
                 <data android:mimeType="video/*" />
+                <data android:mimeType="audio/*" />
             </intent-filter>
 
             <!-- Simplified intent filters for file and content schemes -->
@@ -59,6 +61,7 @@
                 <data android:scheme="http" />
                 <data android:scheme="https" />
                 <data android:mimeType="video/*" />
+                <data android:mimeType="audio/*" />
                 <data android:mimeType="application/sdp" />
                 <data android:mimeType="application/mp4" />
                 <data android:mimeType="application/vnd.apple.mpegurl" />
@@ -82,6 +85,12 @@
                 <data android:pathPattern=".*\\.3gp" />
                 <data android:pathPattern=".*\\.avi" />
                 <data android:pathPattern=".*\\.AVI" />
+                <data android:pathPattern=".*\\.mp3" />
+                <data android:pathPattern=".*\\.MP3" />
+                <data android:pathPattern=".*\\.wav" />
+                <data android:pathPattern=".*\\.WAV" />
+                <data android:pathPattern=".*\\.mkv" />
+                <data android:pathPattern=".*\\.MKV" />
             </intent-filter>
         </activity>
     </application>
