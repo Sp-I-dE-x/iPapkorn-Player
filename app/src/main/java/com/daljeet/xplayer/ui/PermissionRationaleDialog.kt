@@ -8,7 +8,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.daljeet.xplayer.core.ui.R
+import com.daljeet.xplayer.R
 import com.daljeet.xplayer.core.ui.preview.DayNightPreview
 import com.daljeet.xplayer.core.ui.theme.NextPlayerTheme
 
