@@ -25,10 +25,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import dev.anilbeesetti.nextplayer.core.ui.R
-import dev.anilbeesetti.nextplayer.core.ui.components.NextTopAppBar
-import dev.anilbeesetti.nextplayer.core.ui.components.SelectablePreference
-import dev.anilbeesetti.nextplayer.core.ui.designsystem.NextIcons
+import com.daljeet.xplayer.core.ui.R
+import com.daljeet.xplayer.core.ui.components.NextTopAppBar
+import com.daljeet.xplayer.core.ui.components.SelectablePreference
+import com.daljeet.xplayer.core.ui.designsystem.NextIcons
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
