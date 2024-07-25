@@ -43,6 +43,6 @@ fun PreferenceSwitchPreview() {
         title = "Title",
         description = "Description of the preference item goes here.",
         icon = NextIcons.DoubleTap,
-        onClick = {}
+        onClick = {},
     )
 }
