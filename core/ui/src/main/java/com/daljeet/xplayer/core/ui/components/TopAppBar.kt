@@ -88,7 +88,7 @@ private fun NextPlayerMainTopAppBarPreview() {
             IconButton(onClick = {}) {
                 Icon(
                     imageVector = Icons.Rounded.MoreVert,
-                    contentDescription = "More"
+                    contentDescription = "More",
                 )
             }
         }
