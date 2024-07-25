@@ -8,9 +8,9 @@ import android.os.Bundle
 import android.os.Parcelable
 import androidx.core.net.toUri
 import androidx.media3.common.MimeTypes
-import dev.anilbeesetti.nextplayer.core.common.extensions.getFilenameFromUri
-import dev.anilbeesetti.nextplayer.core.common.extensions.getPath
-import dev.anilbeesetti.nextplayer.core.common.extensions.getSubtitles
+import com.daljeet.xplayer.core.common.extensions.getFilenameFromUri
+import com.daljeet.xplayer.core.common.extensions.getPath
+import com.daljeet.xplayer.core.common.extensions.getSubtitles
 import dev.anilbeesetti.nextplayer.feature.player.model.Subtitle
 import java.io.File
 
