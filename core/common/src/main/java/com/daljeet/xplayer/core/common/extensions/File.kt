@@ -1,4 +1,4 @@
-package dev.anilbeesetti.nextplayer.core.common.extensions
+package com.daljeet.xplayer.core.common.extensions
 
 import android.os.Environment
 import java.io.File
