@@ -280,8 +280,7 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun shouldUseHighContrastDarkTheme(uiState: MainActivityUiState): Boolean = when (uiState)
-    {
+    fun shouldUseHighContrastDarkTheme(uiState: MainActivityUiState): Boolean = when (uiState) {
         MainActivityUiState.Loading -> false
         is MainActivityUiState.Success -> uiState.preferences.useHighContrastDarkTheme
     }
