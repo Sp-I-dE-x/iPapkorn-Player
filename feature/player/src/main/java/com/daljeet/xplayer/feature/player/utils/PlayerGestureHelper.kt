@@ -7,18 +7,18 @@ import android.view.ScaleGestureDetector
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
-import com.daljeet.xplayer.core.common.Utils
-import com.daljeet.xplayer.core.common.extensions.dpToPx
-import com.daljeet.xplayer.core.model.DoubleTapGesture
-import com.daljeet.xplayer.core.model.PlayerPreferences
-import com.daljeet.xplayer.core.ui.R as coreUiR
-import com.daljeet.xplayer.feature.player.PlayerActivity
-import com.daljeet.xplayer.feature.player.PlayerViewModel
-import com.daljeet.xplayer.feature.player.R
-import com.daljeet.xplayer.feature.player.extensions.seekBack
-import com.daljeet.xplayer.feature.player.extensions.seekForward
-import com.daljeet.xplayer.feature.player.extensions.shouldFastSeek
-import com.daljeet.xplayer.feature.player.extensions.togglePlayPause
+import dev.anilbeesetti.nextplayer.core.common.Utils
+import dev.anilbeesetti.nextplayer.core.common.extensions.dpToPx
+import dev.anilbeesetti.nextplayer.core.model.DoubleTapGesture
+import dev.anilbeesetti.nextplayer.core.model.PlayerPreferences
+import dev.anilbeesetti.nextplayer.core.ui.R as coreUiR
+import dev.anilbeesetti.nextplayer.feature.player.PlayerActivity
+import dev.anilbeesetti.nextplayer.feature.player.PlayerViewModel
+import dev.anilbeesetti.nextplayer.feature.player.R
+import dev.anilbeesetti.nextplayer.feature.player.extensions.seekBack
+import dev.anilbeesetti.nextplayer.feature.player.extensions.seekForward
+import dev.anilbeesetti.nextplayer.feature.player.extensions.shouldFastSeek
+import dev.anilbeesetti.nextplayer.feature.player.extensions.togglePlayPause
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
@@ -28,7 +28,7 @@ class PlayerGestureHelper(
     private val viewModel: PlayerViewModel,
     private val activity: PlayerActivity,
     private val volumeManager: VolumeManager,
-    private val brightnessManager: BrightnessManager
+    private val brightnessManager: BrightnessManager,
 ) {
     private val prefs: PlayerPreferences
         get() = viewModel.playerPrefs.value
@@ -62,6 +62,8 @@ class PlayerGestureHelper(
             override fun onLongPress(e: MotionEvent) {
                 if (!prefs.useLongPressControls) return
                 if (playerView.player?.isPlaying == false) return
+                if (activity.isControlsLocked) return
+
                 if (currentGestureAction == null) {
                     currentGestureAction = GestureAction.FAST_PLAYBACK
                     currentPlaybackSpeed = playerView.player?.playbackParameters?.speed
@@ -112,7 +114,7 @@ class PlayerGestureHelper(
                 } ?: return false
                 return true
             }
-        }
+        },
     )
 
     private val seekGestureDetector = GestureDetector(
@@ -122,7 +124,7 @@ class PlayerGestureHelper(
                 firstEvent: MotionEvent?,
                 currentEvent: MotionEvent,
                 distanceX: Float,
-                distanceY: Float
+                distanceY: Float,
             ): Boolean {
                 if (firstEvent == null) return false
                 if (inExclusionArea(firstEvent)) return false
@@ -160,13 +162,13 @@ class PlayerGestureHelper(
                     }
                     activity.showPlayerInfo(
                         info = Utils.formatDurationMillis(this.currentPosition),
-                        subInfo = "[${Utils.formatDurationMillisSign(seekChange)}]"
+                        subInfo = "[${Utils.formatDurationMillisSign(seekChange)}]",
                     )
                     return true
                 }
                 return false
             }
-        }
+        },
     )
 
     private val volumeAndBrightnessGestureDetector = GestureDetector(
@@ -176,7 +178,7 @@ class PlayerGestureHelper(
                 firstEvent: MotionEvent?,
                 currentEvent: MotionEvent,
                 distanceX: Float,
-                distanceY: Float
+                distanceY: Float,
             ): Boolean {
                 if (firstEvent == null) return false
                 if (inExclusionArea(firstEvent)) return false
@@ -204,7 +206,7 @@ class PlayerGestureHelper(
                 }
                 return true
             }
-        }
+        },
     )
 
     private val zoomGestureDetector = ScaleGestureDetector(
@@ -233,7 +235,7 @@ class PlayerGestureHelper(
                 }
                 return true
             }
-        }
+        },
     )
 
     private fun releaseGestures() {
@@ -264,7 +266,7 @@ class PlayerGestureHelper(
         val gestureExclusionBorder = playerView.context.dpToPx(GESTURE_EXCLUSION_AREA)
 
         return firstEvent.y < gestureExclusionBorder || firstEvent.y > playerView.height - gestureExclusionBorder ||
-                firstEvent.x < gestureExclusionBorder || firstEvent.x > playerView.width - gestureExclusionBorder
+            firstEvent.x < gestureExclusionBorder || firstEvent.x > playerView.width - gestureExclusionBorder
     }
 
     init {
@@ -299,5 +301,8 @@ class PlayerGestureHelper(
 inline val Int.toMillis get() = this * 1000
 
 enum class GestureAction {
-    SWIPE, SEEK, ZOOM, FAST_PLAYBACK
+    SWIPE,
+    SEEK,
+    ZOOM,
+    FAST_PLAYBACK,
 }
