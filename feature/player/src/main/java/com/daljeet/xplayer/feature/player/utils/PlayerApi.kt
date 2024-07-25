@@ -3,9 +3,9 @@ package com.daljeet.xplayer.feature.player.utils
 import android.content.Intent
 import android.net.Uri
 import androidx.media3.common.C
-import com.daljeet.xplayer.feature.player.PlayerActivity
-import com.daljeet.xplayer.feature.player.extensions.getParcelableUriArray
-import com.daljeet.xplayer.feature.player.model.Subtitle
+import dev.anilbeesetti.nextplayer.feature.player.PlayerActivity
+import dev.anilbeesetti.nextplayer.feature.player.extensions.getParcelableUriArray
+import dev.anilbeesetti.nextplayer.feature.player.model.Subtitle
 
 class PlayerApi(val activity: PlayerActivity) {
 
@@ -33,7 +33,7 @@ class PlayerApi(val activity: PlayerActivity) {
             Subtitle(
                 name = subtitleName,
                 uri = subtitleUri,
-                isSelected = subtitleUri == defaultSub
+                isSelected = subtitleUri == defaultSub,
             )
         }
     }
@@ -65,3 +65,4 @@ class PlayerApi(val activity: PlayerActivity) {
         private const val API_END_BY_COMPLETION = "playback_completion"
     }
 }
+
