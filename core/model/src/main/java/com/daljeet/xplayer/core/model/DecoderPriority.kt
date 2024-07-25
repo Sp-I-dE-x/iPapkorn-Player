@@ -1,5 +1,5 @@
 package com.daljeet.xplayer.core.model
 
 enum class DecoderPriority {
-    PREFER_DEVICE, PREFER_APP, DEVICE_ONLY
+    PREFER_DEVICE, PREFER_APP, DEVICE_ONLY,
 }
