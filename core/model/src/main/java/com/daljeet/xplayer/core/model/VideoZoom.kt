@@ -1,5 +1,8 @@
 package com.daljeet.xplayer.core.model
 
 enum class VideoZoom {
-    BEST_FIT, STRETCH, CROP, HUNDRED_PERCENT
+    BEST_FIT, 
+    STRETCH, 
+    CROP, 
+    HUNDRED_PERCENT,
 }
