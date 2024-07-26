@@ -1,10 +1,9 @@
-
-package dev.anilbeesetti.nextplayer.core.data.repository
+package com.daljeet.xplayer.core.data.repository
 
 import android.net.Uri
-import dev.anilbeesetti.nextplayer.core.data.models.VideoState
-import dev.anilbeesetti.nextplayer.core.model.Folder
-import dev.anilbeesetti.nextplayer.core.model.Video
+import com.daljeet.xplayer.core.data.models.VideoState
+import com.daljeet.xplayer.core.model.Folder
+import com.daljeet.xplayer.core.model.Video
 import kotlinx.coroutines.flow.Flow
 
 interface MediaRepository {
