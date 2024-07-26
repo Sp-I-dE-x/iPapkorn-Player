@@ -1,4 +1,3 @@
-
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="player_description">Управление проигрывателем, настройка жестов</string>
@@ -193,9 +192,5 @@
     <string name="exit">Выйти</string>
     <string name="play_next_video">Воспроизвести следующее видео</string>
     <string name="mark_last_played_media">Отмечать последнее просмотренное видео</string>
-    <string name="open_network_stream">Открыть сетевой поток</string>
-    <string name="floating_play_button">Плавающая кнопка воспроизведения</string>
-    <string name="floating_play_button_desc">Показать плавающую кнопку для продолжения воспроизведения.</string>
-    <string name="open_local_video">Открыть локальное видео</string>
     <string name="mark_last_played_media_desc">Отмечать последнее просмотренное видео на домашнем экране и в папке</string>
 </resources>
