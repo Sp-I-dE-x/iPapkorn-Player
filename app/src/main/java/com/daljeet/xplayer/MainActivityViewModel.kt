@@ -1,11 +1,10 @@
-
-package dev.anilbeesetti.nextplayer
+package com.daljeet.xplayer
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.anilbeesetti.nextplayer.core.data.repository.PreferencesRepository
-import dev.anilbeesetti.nextplayer.core.model.ApplicationPreferences
+import com.daljeet.xplayer.core.data.repository.PreferencesRepository
+import com.daljeet.xplayer.core.model.ApplicationPreferences
 import javax.inject.Inject
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
