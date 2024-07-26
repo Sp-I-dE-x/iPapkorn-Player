@@ -1,4 +1,3 @@
-
 package com.daljeet.xplayer.feature.player
 
 import android.annotation.SuppressLint
