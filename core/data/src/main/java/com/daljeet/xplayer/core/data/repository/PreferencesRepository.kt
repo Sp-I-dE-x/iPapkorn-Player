@@ -1,8 +1,8 @@
 
-package dev.anilbeesetti.nextplayer.core.data.repository
+package com.daljeet.xplayer.core.data.repository
 
-import dev.anilbeesetti.nextplayer.core.model.ApplicationPreferences
-import dev.anilbeesetti.nextplayer.core.model.PlayerPreferences
+import com.daljeet.xplayer.core.model.ApplicationPreferences
+import com.daljeet.xplayer.core.model.PlayerPreferences
 import kotlinx.coroutines.flow.Flow
 
 interface PreferencesRepository {
