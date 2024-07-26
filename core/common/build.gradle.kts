@@ -1,3 +1,4 @@
+
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinAndroid)
@@ -34,6 +35,7 @@ dependencies {
     ksp(libs.hilt.compiler)
     kspAndroidTest(libs.hilt.compiler)
 
-    // Other dependencies (if any)
+    testImplementation(libs.junit4)
+    androidTestImplementation(libs.androidx.test.ext)
+    androidTestImplementation(libs.androidx.test.espresso.core)
 }
-
