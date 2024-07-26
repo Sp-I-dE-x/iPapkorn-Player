@@ -1,4 +1,4 @@
-package com.daljeet.xplayer.core.common
+package dev.anilbeesetti.nextplayer.core.common
 
 import javax.inject.Qualifier
 
@@ -8,5 +8,5 @@ annotation class Dispatcher(val niaDispatcher: NextDispatchers)
 
 enum class NextDispatchers {
     Default,
-    IO
+    IO,
 }
