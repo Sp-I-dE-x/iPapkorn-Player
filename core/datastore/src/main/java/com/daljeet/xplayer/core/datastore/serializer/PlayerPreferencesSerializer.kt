@@ -2,7 +2,7 @@ package com.daljeet.xplayer.core.datastore.serializer
 
 import androidx.datastore.core.CorruptionException
 import androidx.datastore.core.Serializer
-import dev.anilbeesetti.nextplayer.core.model.PlayerPreferences
+import com.daljeet.xplayer.core.model.PlayerPreferences
 import java.io.InputStream
 import java.io.OutputStream
 import kotlinx.serialization.SerializationException
