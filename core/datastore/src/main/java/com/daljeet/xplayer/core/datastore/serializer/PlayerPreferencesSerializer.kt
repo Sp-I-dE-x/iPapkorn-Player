@@ -2,7 +2,7 @@ package com.daljeet.xplayer.core.datastore.serializer
 
 import androidx.datastore.core.CorruptionException
 import androidx.datastore.core.Serializer
-import com.daljeet.xplayer.core.model.PlayerPreferences
+import dev.anilbeesetti.nextplayer.core.model.PlayerPreferences
 import java.io.InputStream
 import java.io.OutputStream
 import kotlinx.serialization.SerializationException
@@ -19,7 +19,7 @@ object PlayerPreferencesSerializer : Serializer<PlayerPreferences> {
         try {
             return jsonFormat.decodeFromString(
                 deserializer = PlayerPreferences.serializer(),
-                string = input.readBytes().decodeToString()
+                string = input.readBytes().decodeToString(),
             )
         } catch (exception: SerializationException) {
             throw CorruptionException("Cannot read datastore", exception)
@@ -31,8 +31,8 @@ object PlayerPreferencesSerializer : Serializer<PlayerPreferences> {
         output.write(
             jsonFormat.encodeToString(
                 serializer = PlayerPreferences.serializer(),
-                value = t
-            ).encodeToByteArray()
+                value = t,
+            ).encodeToByteArray(),
         )
     }
 }
