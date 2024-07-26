@@ -1,7 +1,8 @@
+
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name" translatable="false">iPapkorn</string>
-    <string name="about_description"></string>
+    <string name="about_description">Version, credits</string>
     <string name="about_name">About</string>
     <string name="appearance_description">Adjust the app to your liking</string>
     <string name="appearance_name">Appearance</string>
@@ -37,6 +38,8 @@
     <string name="quick_settings">Quick Settings</string>
     <string name="autoplay_settings">Autoplay</string>
     <string name="autoplay_settings_description">Automatically play the next video in the current folder</string>
+    <string name="pip_settings">Picture in Picture Mode</string>
+    <string name="pip_settings_description">Automatically switch to miniature player when tapping Home Button</string>
     <string name="remember_brightness_level">Remember brightness level</string>
     <string name="remember_brightness_level_description">Remember brightness level between playback sessions</string>
     <string name="remember_selections">Remember selections</string>
@@ -184,6 +187,18 @@
     <string name="properties">Properties</string>
     <string name="volume_boost">Volume boost</string>
     <string name="volume_boost_desc">Boost audio volume up to 200%</string>
+    <string name="open_subtitle">Open local subtitle</string>
+    <string name="no_subtitle_tracks_found">Subtitle tracks for this video are either unavailable or not supported.</string>
+    <string name="no_audio_tracks_found">Audio tracks for this video are either unavailable or not supported.</string>
+    <string name="rename">Rename</string>
+    <string name="rename_to">Rename to</string>
+    <string name="floating_play_button">Floating play button</string>
+    <string name="floating_play_button_desc">Show floating button to play last played media.</string>
+    <string name="mark_last_played_media">Mark last played media</string>
+    <string name="mark_last_played_media_desc">Mark last played media in home and in each folder</string>
+    <string name="exit">Exit</string>
+    <string name="skip_silence">Skip silence</string>
+
 
     <string name="ad_attribution" translatable="false">Ad</string>
     <string name="more_menu" translatable="false">More</string>
@@ -203,17 +218,6 @@
     <string name="rewarded_id" translatable="false">ca-app-pub-1140477542502514/9120222173</string>
     <string name="app_open_id" translatable="false">ca-app-pub-1140477542502514/4738124037</string>
 
-    <!--//Testing
-    <string name="admob_app_id" translatable="false">ca-app-pub-3940256099942544~3347511713</string>
-    <string name="banner_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
-    <string name="interstitial_id" translatable="false">ca-app-pub-3940256099942544/1033173712
-</string>
-    <string name="native_id" translatable="false">ca-app-pub-3940256099942544/2247696110
-</string>
-    <string name="rewarded_id" translatable="false">ca-app-pub-3940256099942544/5224354917
-</string>
-    <string name="app_open_id" translatable="false">ca-app-pub-3940256099942544/9257395921
-</string>-->
 
 
 </resources>
