@@ -82,3 +82,8 @@ object Utils {
             else -> String.format("%d bps", bitrate)
         }
     }
+
+    fun formatLanguage(language: String?): String? {
+        return language?.let { lang -> Locale.forLanguageTag(lang).displayLanguage.takeIf { it.isNotEmpty() } }
+    }
+}
