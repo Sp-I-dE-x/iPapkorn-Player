@@ -1,4 +1,4 @@
-package dev.anilbeesetti.nextplayer.feature.player
+package com.daljeet.xplayer.feature.player
 
 import android.net.Uri
 import androidx.lifecycle.ViewModel
