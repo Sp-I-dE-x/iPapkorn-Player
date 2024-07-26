@@ -16,6 +16,7 @@ data class PlayerPreferences(
     val controllerAutoHideTimeout: Int = 2,
     val seekIncrement: Int = 10,
     val autoplay: Boolean = true,
+    val autoPip: Boolean = true,
 
     // Controls (Gestures)
     val useSwipeControls: Boolean = true,
@@ -36,7 +37,7 @@ data class PlayerPreferences(
     val useSystemCaptionStyle: Boolean = false,
     val preferredSubtitleLanguage: String = "",
     val subtitleTextEncoding: String = "",
-    val subtitleTextSize: Int = 23,
+    val subtitleTextSize: Int = 20,
     val subtitleBackground: Boolean = false,
     val subtitleFont: Font = Font.DEFAULT,
     val subtitleTextBold: Boolean = true,
