@@ -1,19 +1,19 @@
 
-package dev.anilbeesetti.nextplayer.core.data.repository
+package com.daljeet.xplayer.core.data.repository
 
 import android.net.Uri
-import dev.anilbeesetti.nextplayer.core.common.di.ApplicationScope
-import dev.anilbeesetti.nextplayer.core.data.mappers.toFolder
-import dev.anilbeesetti.nextplayer.core.data.mappers.toVideo
-import dev.anilbeesetti.nextplayer.core.data.mappers.toVideoState
-import dev.anilbeesetti.nextplayer.core.data.models.VideoState
-import dev.anilbeesetti.nextplayer.core.database.converter.UriListConverter
-import dev.anilbeesetti.nextplayer.core.database.dao.DirectoryDao
-import dev.anilbeesetti.nextplayer.core.database.dao.MediumDao
-import dev.anilbeesetti.nextplayer.core.database.relations.DirectoryWithMedia
-import dev.anilbeesetti.nextplayer.core.database.relations.MediumWithInfo
-import dev.anilbeesetti.nextplayer.core.model.Folder
-import dev.anilbeesetti.nextplayer.core.model.Video
+import com.daljeet.xplayer.core.common.di.ApplicationScope
+import com.daljeet.xplayer.core.data.mappers.toFolder
+import com.daljeet.xplayer.core.data.mappers.toVideo
+import com.daljeet.xplayer.core.data.mappers.toVideoState
+import com.daljeet.xplayer.core.data.models.VideoState
+import com.daljeet.xplayer.core.database.converter.UriListConverter
+import com.daljeet.xplayer.core.database.dao.DirectoryDao
+import com.daljeet.xplayer.core.database.dao.MediumDao
+import com.daljeet.xplayer.core.database.relations.DirectoryWithMedia
+import com.daljeet.xplayer.core.database.relations.MediumWithInfo
+import com.daljeet.xplayer.core.model.Folder
+import com.daljeet.xplayer.core.model.Video
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
