@@ -182,4 +182,15 @@
     <string name="audio_track">Pista del audio</string>
     <string name="volume_boost_desc">Aumenta el volumen de audio hasta un 200%</string>
     <string name="volume_boost">Refuerzo del volumen</string>
+    <string name="pip_settings">Modo Imagen en imagen</string>
+    <string name="pip_settings_description">Cambia automáticamente al reproductor en miniatura al pulsar el botón de inicio</string>
+    <string name="no_audio_tracks_found">Las pistas de audio de este vídeo no están disponibles o no son compatibles.</string>
+    <string name="open_subtitle">Abrir los subtítulos locales</string>
+    <string name="no_subtitle_tracks_found">Las pistas de subtítulos para este vídeo no están disponibles o no son compatibles.</string>
+    <string name="rename">Cambie el nombre</string>
+    <string name="rename_to">Cambiar el nombre a</string>
+    <string name="mark_last_played_media">Marcar el último medio reproducido</string>
+    <string name="mark_last_played_media_desc">Marcar el último medio reproducido al inicio y en cada carpeta</string>
+    <string name="exit">Salir</string>
+    <string name="play_next_video">Reproducir el siguiente vídeo</string>
 </resources>
