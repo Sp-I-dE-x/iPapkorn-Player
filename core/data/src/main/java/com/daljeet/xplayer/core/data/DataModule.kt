@@ -20,6 +20,6 @@ interface DataModule {
 
     @Binds
     fun bindsPreferencesRepository(
-        preferencesRepository: LocalPreferencesRepository
+        preferencesRepository: LocalPreferencesRepository,
     ): PreferencesRepository
 }
