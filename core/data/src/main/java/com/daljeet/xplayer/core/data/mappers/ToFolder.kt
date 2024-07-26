@@ -4,11 +4,12 @@ import com.daljeet.xplayer.core.common.Utils
 import com.daljeet.xplayer.core.database.entities.DirectoryEntity
 import com.daljeet.xplayer.core.model.Folder
 
-fun DirectoryEntity.toFolder() = Folder(
-    name = name,
-    path = path,
-    mediaSize = size,
-    mediaCount = mediaCount,
-    dateModified = modified,
-    formattedMediaSize = Utils.formatFileSize(size)
+fun DirectoryWithMedia.toFolder() = Folder(
+    name = directory.name,
+    path = directory.path,
+    mediaSize = media.sumOf { it.size },
+    mediaCount = media.size,
+    dateModified = directory.modified,
+    formattedMediaSize = Utils.formatFileSize(media.sumOf { it.size }),
+    mediaList = media.map { it.toVideo() },
 )
