@@ -191,10 +191,7 @@
     <string name="floating_play_button">زر تشغيل عائم</string>
     <string name="mark_last_played_media">تعليم آخر فيديو شُغِل</string>
     <string name="mark_last_played_media_desc">تعليم آخر فيديو شُغِل في شاشة البداية وفي كل مجلد</string>
-    <string name="open_local_video">فتح فيديو محلي</string>
-    <string name="open_network_stream">فتح بث شبكة</string>
     <string name="exit">خروج</string>
-    <string name="play_next_video">تشغيل الفيديو التالي</string>
     <string name="no_audio_tracks_found">مسار الصوت لهذا الفيديو إما غير متوفرة أو غير مدعومة.</string>
     <string name="floating_play_button_desc">إظهار زر عائم لتشغيل آخر فيديو شُغِل.</string>
     <string name="no_subtitle_tracks_found">مسار الترجمة لهذا الفيديو إما غير متوفرة أو غير مدعومة.</string>
