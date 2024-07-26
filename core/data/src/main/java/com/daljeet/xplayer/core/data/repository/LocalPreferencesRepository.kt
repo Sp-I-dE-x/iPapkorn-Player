@@ -1,10 +1,10 @@
 
-package dev.anilbeesetti.nextplayer.core.data.repository
+package com.daljeet.xplayer.core.core.data.repository
 
-import dev.anilbeesetti.nextplayer.core.datastore.datasource.AppPreferencesDataSource
-import dev.anilbeesetti.nextplayer.core.datastore.datasource.PlayerPreferencesDataSource
-import dev.anilbeesetti.nextplayer.core.model.ApplicationPreferences
-import dev.anilbeesetti.nextplayer.core.model.PlayerPreferences
+import com.daljeet.xplayer.core.core.datastore.datasource.AppPreferencesDataSource
+import com.daljeet.xplayer.core.core.datastore.datasource.PlayerPreferencesDataSource
+import com.daljeet.xplayer.core.core.model.ApplicationPreferences
+import com.daljeet.xplayer.core.core.model.PlayerPreferences
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 
