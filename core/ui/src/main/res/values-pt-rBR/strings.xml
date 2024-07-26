@@ -1,7 +1,8 @@
+
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="about_name">Sobre</string>
-    <string name="appearance_description">Personalize o aplicativo</string>
+    <string name="appearance_description">Ajuste o aplicativo ao seu gosto</string>
     <string name="appearance_name">Aparência</string>
     <string name="ascending">Crescente</string>
     <string name="cancel">Cancelar</string>
@@ -18,7 +19,7 @@
     <string name="open_settings">Abrir configurações</string>
     <string name="permission_not_granted">Permissão não concedida</string>
     <string name="fast_seek">Navegação rápida</string>
-    <string name="fast_seek_description">Navegue até o quadro-chave mais próximo em vez de um exato</string>
+    <string name="fast_seek_description">Procure o quadro-chave mais próximo em vez do exato.</string>
     <string name="error_playing_video">Erro: não foi possível reproduzir o vídeo</string>
     <string name="permission_request">Solicitação de permissão</string>
     <string name="player_controls_exit">Navegar para cima</string>
@@ -29,7 +30,7 @@
     <string name="player_controls_progress">Barra de progresso do player</string>
     <string name="player_name">Player</string>
     <string name="quick_settings">Configurações rápidas</string>
-    <string name="remember_brightness_level">Nível de brilho</string>
+    <string name="remember_brightness_level">Lembrar nível de brilho</string>
     <string name="remember_brightness_level_description">Lembrar do nível de brilho entre as sessões de reprodução</string>
     <string name="remember_selections">Lembrar seleções</string>
     <string name="remember_selections_description">Lembrar das seleções para cada arquivo, como faixa de áudio, faixa de legenda, etc</string>
@@ -64,7 +65,7 @@
     <string name="seek_gesture_description">Deslize horizontalmente para navegar para frente ou para trás</string>
     <string name="about_description">Versão, créditos</string>
     <string name="grant_permission">Conceder permissão</string>
-    <string name="done">Feito</string>
+    <string name="done">OK</string>
     <string name="permission_info">O aplicativo Next Player precisa da permissão \"%1$s\" para acessar e reproduzir mídia. Sem ele, o acesso à mídia e a reprodução não funcionarão. Para usar o aplicativo completamente, conceda a permissão.</string>
     <string name="permission_settings">O aplicativo Next Player precisa da permissão \"%1$s\" para acessar e reproduzir mídia. Sem ele, o acesso à mídia e a reprodução não funcionarão. Para usar o aplicativo completamente, conceda a permissão nas configurações, pois ela foi negada permanentemente.</string>
     <string name="audio">Áudio</string>
@@ -106,8 +107,8 @@
     <string name="date">Data</string>
     <string name="newest">Mais recente</string>
     <string name="default_playback_speed">Velocidade de reprodução padrão</string>
-    <string name="enter_a_network_url">Digite uma URL de conexão:</string>
-    <string name="network_stream">Conexão de transmissão</string>
+    <string name="enter_a_network_url">Digite uma URL de rede:</string>
+    <string name="network_stream">Rede de Transmissão</string>
     <string name="serif">Serif</string>
     <string name="play_file">Abrir arquivo de vídeo para reproduzir</string>
     <string name="play_url">Digitar URL de vídeo para reproduzir</string>
@@ -126,9 +127,9 @@
     <string name="video_software_decoders">Software de decodificadores de vídeo</string>
     <string name="video_software_decoders_desc">Use software de decodificadores de vídeo (experimental)</string>
     <string name="decoder_priority">Prioridade do decodificador</string>
-    <string name="prefer_device_decoders">Prefira dispositivos de decodificação</string>
-    <string name="prefer_app_decoders">Prefira aplicativos de decodificação</string>
-    <string name="device_decoders_only">Somente dispositivos de decodificação</string>
+    <string name="prefer_device_decoders">Preferir decodificadores do dispositivo</string>
+    <string name="prefer_app_decoders">Preferir decodificadores do aplicativo</string>
+    <string name="device_decoders_only">Apenas decodificadores do dispositivo</string>
     <string name="embedded_styles">Estilos embutidos</string>
     <string name="embedded_styles_desc">Aplicar os estilos embutidos que estão presentes em arquivos de legendas, como ASS e assim por diante</string>
     <string name="controller_timeout">Tempo limite do controlador</string>
@@ -164,8 +165,8 @@
     <string name="long_press_gesture_desc">Pressione e segure para reproduzir na velocidade %.1fx</string>
     <string name="long_press_gesture">Gesto de toque longo</string>
     <string name="fast_playback_speed">%.1fx velocidade</string>
-    <string name="require_audio_focus_desc">Pause outros players enquanto este player reproduz vídeos e vice-versa.</string>
-    <string name="require_audio_focus">Requerir foco de áudio</string>
+    <string name="require_audio_focus_desc">Pause outros players enquanto este player estiver reproduzindo vídeos e vice-versa.</string>
+    <string name="require_audio_focus">Requerer foco de áudio</string>
     <string name="codec">Codec</string>
     <string name="properties">Propriedades</string>
     <string name="channels">Canais</string>
@@ -174,12 +175,27 @@
     <string name="sample_format">Formato de amostragem</string>
     <string name="bitrate">Taxa de bits</string>
     <string name="frame_rate">Taxa de quadros</string>
-    <string name="language">Linguagem</string>
-    <string name="okay">Feito</string>
+    <string name="language">Idioma</string>
+    <string name="okay">OK</string>
     <string name="audio_track">Faixa de áudio</string>
     <string name="sample_rate">Taxa de amostragem</string>
     <string name="file">Arquivo</string>
     <string name="format">Formato</string>
-    <string name="volume_boost_desc">Anplificar o volume do áudio em até 200%</string>
+    <string name="volume_boost_desc">Amplificar o volume do áudio em até 200%</string>
     <string name="volume_boost">Amplificar volume</string>
+    <string name="pip_settings_description">Mude automaticamente para o player em miniatura ao tocar no botão home</string>
+    <string name="pip_settings">Modo Picture in Picture</string>
+    <string name="open_subtitle">Abrir legenda local</string>
+    <string name="no_subtitle_tracks_found">As faixas de legenda deste vídeo não estão disponíveis ou não são suportadas.</string>
+    <string name="no_audio_tracks_found">As faixas de áudio deste vídeo não estão disponíveis ou não são suportadas.</string>
+    <string name="rename">Renomear</string>
+    <string name="rename_to">Renomear para</string>
+    <string name="mark_last_played_media">Marcar a última mídia reproduzida</string>
+    <string name="mark_last_played_media_desc">Marque a última mídia reproduzida na página inicial e em cada pasta</string>
+    <string name="open_local_video">Abrir vídeo local</string>
+    <string name="floating_play_button">Botão de reprodução flutuante</string>
+    <string name="floating_play_button_desc">Mostrar botão flutuante para reproduzir a última mídia reproduzida</string>
+    <string name="open_network_stream">Abrir streaming</string>
+    <string name="exit">Sair</string>
+    <string name="play_next_video">Reproduzir próximo vídeo</string>
 </resources>
