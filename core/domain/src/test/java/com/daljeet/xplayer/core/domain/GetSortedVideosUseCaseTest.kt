@@ -2,10 +2,8 @@ package com.daljeet.xplayer.core.domain
 
 import com.daljeet.xplayer.core.data.repository.fake.FakeMediaRepository
 import com.daljeet.xplayer.core.data.repository.fake.FakePreferencesRepository
-import com.daljeet.xplayer.core.model.SortBy
-import com.daljeet.xplayer.core.model.SortOrder
+import com.daljeet.xplayer.core.model.Sort
 import com.daljeet.xplayer.core.model.Video
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
