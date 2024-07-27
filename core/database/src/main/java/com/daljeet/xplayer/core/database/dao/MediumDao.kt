@@ -12,7 +12,7 @@ import com.daljeet.xplayer.core.database.relations.MediumWithInfo
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface MediumDao {
+interface MediumDao.kt {
 
     @Upsert
     suspend fun upsert(medium: MediumEntity)
