@@ -9,7 +9,7 @@ import com.daljeet.xplayer.core.database.relations.DirectoryWithMedia
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface DirectoryDao {
+interface DirectoryDao.kt {
 
     @Upsert
     suspend fun upsert(directory: DirectoryEntity)
