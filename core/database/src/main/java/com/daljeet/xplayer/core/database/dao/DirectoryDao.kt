@@ -1,77 +1,30 @@
+
 package com.daljeet.xplayer.core.database.dao
 
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Upsert
-import com.daljeet.xplayer.core.database.entities.AudioStreamInfoEntity
-import com.daljeet.xplayer.core.database.entities.MediumEntity
-import com.daljeet.xplayer.core.database.entities.SubtitleStreamInfoEntity
-import com.daljeet.xplayer.core.database.entities.VideoStreamInfoEntity
-import com.daljeet.xplayer.core.database.relations.MediumWithInfo
+import com.daljeet.xplayer.core.database.entities.DirectoryEntity
+import com.daljeet.xplayer.core.database.relations.DirectoryWithMedia
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface MediumDao {
+interface DirectoryDao {
 
     @Upsert
-    suspend fun upsert(medium: MediumEntity)
+    suspend fun upsert(directory: DirectoryEntity)
 
     @Upsert
-    suspend fun upsertAll(media: List<MediumEntity>)
+    suspend fun upsertAll(directories: List<DirectoryEntity>)
 
-    @Query("SELECT * FROM media WHERE uri = :uri")
-    suspend fun get(uri: String): MediumEntity?
-
-    @Query("SELECT * FROM media")
-    fun getAll(): Flow<List<MediumEntity>>
-
-    @Query("SELECT * FROM media WHERE parent_path = :directoryPath")
-    fun getAllFromDirectory(directoryPath: String): Flow<List<MediumEntity>>
+    @Query("SELECT * FROM directories")
+    fun getAll(): Flow<List<DirectoryEntity>>
 
     @Transaction
-    @Query("SELECT * FROM media WHERE uri = :uri")
-    suspend fun getWithInfo(uri: String): MediumWithInfo?
+    @Query("SELECT * FROM directories")
+    fun getAllWithMedia(): Flow<List<DirectoryWithMedia>>
 
-    @Transaction
-    @Query("SELECT * FROM media")
-    fun getAllWithInfo(): Flow<List<MediumWithInfo>>
-
-    @Transaction
-    @Query("SELECT * FROM media WHERE parent_path = :directoryPath")
-    fun getAllWithInfoFromDirectory(directoryPath: String): Flow<List<MediumWithInfo>>
-
-    @Query("DELETE FROM media WHERE uri in (:uris)")
-    suspend fun delete(uris: List<String>)
-
-    @Query(
-        "UPDATE OR REPLACE media SET " +
-            "playback_position = :position, " +
-            "audio_track_index = :audioTrackIndex, " +
-            "subtitle_track_index = :subtitleTrackIndex, " +
-            "playback_speed = :playbackSpeed, " +
-            "external_subs = :externalSubs, " +
-            "last_played_time = :lastPlayedTime, " +
-            "video_scale = :videoScale " +
-            "WHERE uri = :uri",
-    )
-    suspend fun updateMediumState(
-        uri: String,
-        position: Long,
-        audioTrackIndex: Int?,
-        subtitleTrackIndex: Int?,
-        playbackSpeed: Float?,
-        externalSubs: String,
-        lastPlayedTime: Long?,
-        videoScale: Float,
-    )
-
-    @Upsert
-    fun upsertVideoStreamInfo(videoStreamInfoEntity: VideoStreamInfoEntity)
-
-    @Upsert
-    fun upsertAudioStreamInfo(audioStreamInfoEntity: AudioStreamInfoEntity)
-
-    @Upsert
-    fun upsertSubtitleStreamInfo(subtitleStreamInfoEntity: SubtitleStreamInfoEntity)
+    @Query("DELETE FROM directories WHERE path in (:paths)")
+    suspend fun delete(paths: List<String>)
 }
