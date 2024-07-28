@@ -5,14 +5,14 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(
-    tableName = "media"
+    tableName = "media",
 )
 data class MediumEntity(
     @PrimaryKey
-    @ColumnInfo(name = "path")
-    val path: String,
+    @ColumnInfo(name = "uri")
+    val uriString: String,
+    @ColumnInfo(name = "path") val path: String,
     @ColumnInfo(name = "filename") val name: String,
-    @ColumnInfo(name = "uri") val uriString: String,
     @ColumnInfo(name = "parent_path") val parentPath: String,
     @ColumnInfo(name = "last_modified") val modified: Long,
     @ColumnInfo(name = "size") val size: Long,
@@ -23,12 +23,15 @@ data class MediumEntity(
 
     // Medium info
     @ColumnInfo(name = "format", defaultValue = "NULL") val format: String? = null,
-    @ColumnInfo(name = "thumbnailPath", defaultValue = "NULL") val thumbnailPath: String? = null,
+    @ColumnInfo(name = "thumbnail_path", defaultValue = "NULL") val thumbnailPath: String? = null,
 
     // Medium playback state
     @ColumnInfo(name = "playback_position") val playbackPosition: Long = 0,
     @ColumnInfo(name = "audio_track_index") val audioTrackIndex: Int? = null,
     @ColumnInfo(name = "subtitle_track_index") val subtitleTrackIndex: Int? = null,
     @ColumnInfo(name = "playback_speed") val playbackSpeed: Float? = null,
-    @ColumnInfo(name = "external_subs", defaultValue = "") val externalSubs: String = ""
+    @ColumnInfo(name = "last_played_time") val lastPlayedTime: Long? = null,
+    @ColumnInfo(name = "external_subs", defaultValue = "") val externalSubs: String = "",
+    @ColumnInfo(name = "video_scale", defaultValue = "1.0") val videoScale: Float = 1f,
 )
+
